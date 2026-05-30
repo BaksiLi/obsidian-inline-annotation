@@ -2,9 +2,9 @@
 
 Reading-view Obsidian adapter for Inline Annotation.
 
-This first version is intentionally narrow. It registers a Markdown
+The current adapter is intentionally narrow. It registers a Markdown
 postprocessor, scans text nodes in reading view, and renders Inline Annotation
-syntax with `markdown-it-inline-annotation/core`.
+v2 syntax with `markdown-it-inline-annotation/core`.
 
 ## Scope
 
@@ -77,15 +77,15 @@ body {
 
 ## Obsidian Notes
 
-Only Reading view is supported in v1. Live Preview and Source mode may still show
-the original source syntax.
+Only Reading view is supported. Live Preview and Source mode may still show the
+original source syntax.
 
 Obsidian parses Markdown before this plugin runs. That means normal Markdown and
 Obsidian link syntax may already have become `<a>` elements by the time the
 postprocessor sees the document. The adapter currently skips links to avoid
 breaking anchors; link annotation support should be designed separately.
 
-Annotation text should be plain text in v1. Markdown inside an annotation, such
+Annotation text should be plain text. Markdown inside an annotation, such
 as `[term]^^(**bold gloss**)`, may be split into multiple rendered DOM nodes by
 Obsidian before this plugin runs, so it is not supported by the reading-view
 postprocessor.

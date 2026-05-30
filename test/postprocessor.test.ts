@@ -14,7 +14,7 @@ interface FixtureCorpus {
 }
 
 const OBSIDIAN_SKIPPED_SHARED_FIXTURES = new Set([
-  "ruby-pipe-saturated-consumes-chain",
+  "ruby-pipe-saturated-passes-through",
   "align-per-character",
   "align-auto-hide",
   "align-two-level-per-character",
