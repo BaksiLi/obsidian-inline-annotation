@@ -7,7 +7,8 @@
   "scripts": {
     "build": "node esbuild.config.mjs",
     "test": "node scripts/run-tests.mjs",
-    "check": "npm run build && npm test && node scripts/check-package.mjs"
+    "check": "npm run build && npm test && node scripts/check-package.mjs",
+    "install:vault": "npm run build && node scripts/install-vault.mjs"
   },
   "dependencies": {
     "markdown-it-inline-annotation": "^0.1.1"

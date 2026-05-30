@@ -1,0 +1,77 @@
+/*
+ * Inline Annotation — Obsidian reading-view stylesheet
+ *
+ * Mirrors the canonical ia-* class contract used by the markdown-it and
+ * Logseq implementations. The core renderer emits inline styles for critical
+ * positioning, but Obsidian still needs this stylesheet for stable ruby text
+ * sizing and host-independent class-mode behavior.
+ */
+
+ruby.ia-ruby {
+  display: ruby;
+}
+
+ruby.ia-ruby rt,
+ruby.ia-ruby rtc rt {
+  font-size: 0.6em;
+  line-height: 1;
+}
+
+ruby.ia-ruby.ia-ruby-over {
+  ruby-position: over;
+}
+
+ruby.ia-ruby.ia-ruby-under {
+  ruby-position: under;
+}
+
+span.ia-bouten.ia-bouten-over {
+  text-emphasis: filled dot;
+  -webkit-text-emphasis: filled dot;
+  text-emphasis-position: over right;
+  -webkit-text-emphasis-position: over right;
+}
+
+span.ia-bouten.ia-bouten-under {
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
+}
+
+span.ia-bouten.ia-bouten-over.ia-bouten-under {
+  text-emphasis: filled dot;
+  -webkit-text-emphasis: filled dot;
+  text-emphasis-position: over right;
+  -webkit-text-emphasis-position: over right;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
+}
+
+span.ia-underline {
+  text-decoration-line: underline;
+  text-underline-offset: 0.15em;
+}
+
+.ia-underline-wavy {
+  text-decoration-style: wavy;
+}
+
+.ia-underline-double {
+  text-decoration-style: double;
+}
+
+ruby.ia-ruby-mixed.ia-bouten-over {
+  text-emphasis: filled dot;
+  -webkit-text-emphasis: filled dot;
+  text-emphasis-position: over right;
+  -webkit-text-emphasis-position: over right;
+}
+
+ruby.ia-ruby-mixed.ia-bouten-under {
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
+}
+
+ruby.ia-ruby-mixed.ia-underline {
+  text-decoration-line: underline;
+  text-underline-offset: 0.15em;
+}

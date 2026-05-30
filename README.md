@@ -33,6 +33,14 @@ Inline Annotation HTML corpus plus Obsidian-specific skip behavior for links,
 code, preformatted blocks, existing ruby, scripts, styles, textareas, and
 `data-inline-annotation-ignore`.
 
+To install only the runtime files into a local test vault:
+
+```sh
+npm run install:vault -- "/path/to/Vault" --clean
+```
+
+This copies only `main.js`, `manifest.json`, `versions.json`, and `styles.css`.
+
 ## Safety Model
 
 User-authored base and annotation text is escaped by the shared core renderer.
