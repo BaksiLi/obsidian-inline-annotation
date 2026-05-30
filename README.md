@@ -36,10 +36,25 @@ code, preformatted blocks, existing ruby, scripts, styles, textareas, and
 To install only the runtime files into a local test vault:
 
 ```sh
-npm run install:vault -- "/path/to/Vault" --clean
+npm run install:vault -- "/path/to/Vault" --clean --enable
 ```
 
 This copies only `main.js`, `manifest.json`, `versions.json`, and `styles.css`.
+With `--enable`, it also adds `inline-annotation` to the vault's
+`.obsidian/community-plugins.json`.
+
+After installing, reload Obsidian or disable and re-enable the plugin so Obsidian
+loads the latest `main.js` and `styles.css`.
+
+## Obsidian Notes
+
+Only Reading view is supported in v1. Live Preview and Source mode may still show
+the original source syntax.
+
+Obsidian parses Markdown before this plugin runs. That means normal Markdown and
+Obsidian link syntax may already have become `<a>` elements by the time the
+postprocessor sees the document. The adapter currently skips links to avoid
+breaking anchors; link annotation support should be designed separately.
 
 ## Safety Model
 

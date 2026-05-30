@@ -46,6 +46,20 @@ span.ia-bouten.ia-bouten-over.ia-bouten-under {
   text-underline-offset: 0.15em;
 }
 
+span.ia-bouten.ia-bouten-over.ia-underline {
+  text-emphasis: filled dot;
+  -webkit-text-emphasis: filled dot;
+  text-emphasis-position: over right;
+  -webkit-text-emphasis-position: over right;
+  text-decoration-line: underline;
+  text-underline-offset: 0.15em;
+}
+
+span.ia-bouten.ia-bouten-under.ia-underline {
+  text-decoration-line: underline;
+  text-underline-offset: 0.15em;
+}
+
 span.ia-underline {
   text-decoration-line: underline;
   text-underline-offset: 0.15em;

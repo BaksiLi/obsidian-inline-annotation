@@ -1,19 +1,21 @@
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const manifest = JSON.parse(readFileSync(new URL("../manifest.json", import.meta.url), "utf8"));
 const args = process.argv.slice(2);
 const clean = args.includes("--clean");
-const targetArg = args.find((arg) => arg !== "--clean") ?? process.env.OBSIDIAN_VAULT;
+const enable = args.includes("--enable");
+const targetArg = args.find((arg) => arg !== "--clean" && arg !== "--enable") ?? process.env.OBSIDIAN_VAULT;
 
 if (!targetArg) {
-  console.error("Usage: npm run install:vault -- <vault path | plugins path | plugin path> [--clean]");
+  console.error("Usage: npm run install:vault -- <vault path | plugins path | plugin path> [--clean] [--enable]");
   process.exit(1);
 }
 
 const sourceRoot = path.resolve(new URL("..", import.meta.url).pathname);
 const targetRoot = path.resolve(targetArg);
 const pluginDir = resolvePluginDir(targetRoot);
+const vaultDir = resolveVaultDir(pluginDir);
 const files = ["main.js", "manifest.json", "versions.json", "styles.css"];
 
 if (clean && existsSync(pluginDir)) {
@@ -26,7 +28,10 @@ for (const file of files) {
   cpSync(path.join(sourceRoot, file), path.join(pluginDir, file));
 }
 
+if (enable) enablePlugin(vaultDir);
+
 console.log(`Installed ${manifest.id} to ${pluginDir}`);
+if (enable) console.log(`Enabled ${manifest.id} in ${path.join(vaultDir, ".obsidian", "community-plugins.json")}`);
 
 function resolvePluginDir(target) {
   if (existsSync(path.join(target, "manifest.json"))) return target;
@@ -36,4 +41,26 @@ function resolvePluginDir(target) {
   }
   if (path.basename(target) === ".obsidian") return path.join(target, "plugins", manifest.id);
   return path.join(target, ".obsidian", "plugins", manifest.id);
+}
+
+function resolveVaultDir(pluginDir) {
+  const pluginsDir = path.dirname(pluginDir);
+  const obsidianDir = path.dirname(pluginsDir);
+  if (path.basename(pluginsDir) !== "plugins" || path.basename(obsidianDir) !== ".obsidian") {
+    throw new Error(`Cannot resolve Obsidian vault from plugin directory: ${pluginDir}`);
+  }
+  return path.dirname(obsidianDir);
+}
+
+function enablePlugin(vaultDir) {
+  const configPath = path.join(vaultDir, ".obsidian", "community-plugins.json");
+  let plugins = [];
+  if (existsSync(configPath)) {
+    plugins = JSON.parse(readFileSync(configPath, "utf8"));
+    if (!Array.isArray(plugins)) throw new Error(`${configPath} must contain a JSON array`);
+  }
+  if (!plugins.includes(manifest.id)) {
+    plugins.push(manifest.id);
+    writeFileSync(configPath, `${JSON.stringify(plugins, null, 2)}\n`);
+  }
 }
