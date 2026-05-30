@@ -6,14 +6,16 @@
   "main": "main.js",
   "scripts": {
     "build": "node esbuild.config.mjs",
-    "check": "npm run build && node scripts/check-package.mjs"
+    "test": "node scripts/run-tests.mjs",
+    "check": "npm run build && npm test && node scripts/check-package.mjs"
   },
   "dependencies": {
     "markdown-it-inline-annotation": "^0.1.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "esbuild": "^0.21.0",
+    "esbuild": "^0.28.0",
+    "happy-dom": "^20.9.0",
     "obsidian": "^1.5.0",
     "typescript": "^5.0.0"
   },

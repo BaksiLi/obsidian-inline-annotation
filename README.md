@@ -27,6 +27,12 @@ npm run check
 The package bundles `markdown-it-inline-annotation` into `main.js` and keeps
 `obsidian` external, matching normal Obsidian plugin packaging.
 
+`npm run check` builds the plugin, runs DOM postprocessor fixtures with
+`happy-dom`, and verifies package boundaries. The DOM fixtures include the shared
+Inline Annotation HTML corpus plus Obsidian-specific skip behavior for links,
+code, preformatted blocks, existing ruby, scripts, styles, textareas, and
+`data-inline-annotation-ignore`.
+
 ## Safety Model
 
 User-authored base and annotation text is escaped by the shared core renderer.
