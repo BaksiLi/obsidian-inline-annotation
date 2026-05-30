@@ -5,7 +5,7 @@ Build and install the runtime files:
 ```sh
 npm install
 npm run check
-npm run install:vault -- "/path/to/Vault" --clean --enable
+npm run install:vault -- "/path/to/Vault" --clean --enable --examples
 ```
 
 The installer copies only:
@@ -34,3 +34,7 @@ Community plugins.
   supported in v1
 
 Use Reading view for smoke testing.
+
+For a focused test note, copy `examples/obsidian-smoke.md` into the vault and
+open it in Reading view. Passing `--examples` to the installer copies it as
+`inline-annotation smoke.md`.

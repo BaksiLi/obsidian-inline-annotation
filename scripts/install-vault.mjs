@@ -5,10 +5,14 @@ const manifest = JSON.parse(readFileSync(new URL("../manifest.json", import.meta
 const args = process.argv.slice(2);
 const clean = args.includes("--clean");
 const enable = args.includes("--enable");
-const targetArg = args.find((arg) => arg !== "--clean" && arg !== "--enable") ?? process.env.OBSIDIAN_VAULT;
+const examples = args.includes("--examples");
+const targetArg =
+  args.find((arg) => arg !== "--clean" && arg !== "--enable" && arg !== "--examples") ?? process.env.OBSIDIAN_VAULT;
 
 if (!targetArg) {
-  console.error("Usage: npm run install:vault -- <vault path | plugins path | plugin path> [--clean] [--enable]");
+  console.error(
+    "Usage: npm run install:vault -- <vault path | plugins path | plugin path> [--clean] [--enable] [--examples]"
+  );
   process.exit(1);
 }
 
@@ -29,9 +33,11 @@ for (const file of files) {
 }
 
 if (enable) enablePlugin(vaultDir);
+if (examples) installExamples(vaultDir);
 
 console.log(`Installed ${manifest.id} to ${pluginDir}`);
 if (enable) console.log(`Enabled ${manifest.id} in ${path.join(vaultDir, ".obsidian", "community-plugins.json")}`);
+if (examples) console.log(`Installed examples to ${path.join(vaultDir, "inline-annotation smoke.md")}`);
 
 function resolvePluginDir(target) {
   if (existsSync(path.join(target, "manifest.json"))) return target;
@@ -63,4 +69,8 @@ function enablePlugin(vaultDir) {
     plugins.push(manifest.id);
     writeFileSync(configPath, `${JSON.stringify(plugins, null, 2)}\n`);
   }
+}
+
+function installExamples(vaultDir) {
+  cpSync(path.join(sourceRoot, "examples", "obsidian-smoke.md"), path.join(vaultDir, "inline-annotation smoke.md"));
 }

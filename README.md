@@ -36,15 +36,22 @@ code, preformatted blocks, existing ruby, scripts, styles, textareas, and
 To install only the runtime files into a local test vault:
 
 ```sh
-npm run install:vault -- "/path/to/Vault" --clean --enable
+npm run install:vault -- "/path/to/Vault" --clean --enable --examples
 ```
 
 This copies only `main.js`, `manifest.json`, `versions.json`, and `styles.css`.
 With `--enable`, it also adds `inline-annotation` to the vault's
 `.obsidian/community-plugins.json`.
+With `--examples`, it copies `examples/obsidian-smoke.md` into the vault as
+`inline-annotation smoke.md`.
 
 After installing, reload Obsidian or disable and re-enable the plugin so Obsidian
 loads the latest `main.js` and `styles.css`.
+
+Use [examples/obsidian-smoke.md](./examples/obsidian-smoke.md) for a focused
+Reading view smoke test. Avoid using the Logseq showcase as the primary Obsidian
+test file; it includes source/output pairs and Logseq-oriented edge cases that
+make Obsidian's reading view look noisier than real notes.
 
 ## Obsidian Notes
 
