@@ -56,6 +56,11 @@ Obsidian link syntax may already have become `<a>` elements by the time the
 postprocessor sees the document. The adapter currently skips links to avoid
 breaking anchors; link annotation support should be designed separately.
 
+Annotation text should be plain text in v1. Markdown inside an annotation, such
+as `[term]^^(**bold gloss**)`, may be split into multiple rendered DOM nodes by
+Obsidian before this plugin runs, so it is not supported by the reading-view
+postprocessor.
+
 ## Safety Model
 
 User-authored base and annotation text is escaped by the shared core renderer.

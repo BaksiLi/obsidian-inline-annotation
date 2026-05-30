@@ -105,4 +105,15 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
   assert.equal(root.innerHTML.split("<ruby").length - 1, 1);
 }
 
+{
+  const root = createRoot("<p><span></span><strong>bold gloss</strong><span>)</span></p>");
+  root.querySelector("span")!.textContent = "[term]^^(";
+
+  const stats = renderInlineAnnotationsInElement(root);
+
+  assert.equal(stats.replacements, 0);
+  assert.ok(root.innerHTML.includes("[term]^^("));
+  assert.ok(root.innerHTML.includes("<strong>bold gloss</strong>"));
+}
+
 console.log(`Obsidian DOM postprocessor: ${(fixtureCorpus as FixtureCorpus).cases.length} shared fixtures passed`);

@@ -1,4 +1,4 @@
-import { hasInlineAnnotation, renderInlineAnnotationsToHtml } from "markdown-it-inline-annotation/core";
+import { findInlineAnnotation, renderInlineAnnotationsToHtml } from "markdown-it-inline-annotation/core";
 
 const SKIP_TAGS = new Set(["A", "CODE", "PRE", "RUBY", "SCRIPT", "STYLE", "TEXTAREA"]);
 
@@ -11,7 +11,7 @@ export function renderInlineAnnotationsInElement(root: HTMLElement): InlineAnnot
   const nodeFilter = document.defaultView?.NodeFilter ?? NodeFilter;
   const walker = document.createTreeWalker(root, nodeFilter.SHOW_TEXT, {
     acceptNode(node) {
-      if (!node.nodeValue || !hasInlineAnnotation(node.nodeValue)) return nodeFilter.FILTER_REJECT;
+      if (!node.nodeValue || !findInlineAnnotation(node.nodeValue)) return nodeFilter.FILTER_REJECT;
       const parent = node.parentElement;
       if (!parent || shouldSkipElement(parent, root)) return nodeFilter.FILTER_REJECT;
       return nodeFilter.FILTER_ACCEPT;

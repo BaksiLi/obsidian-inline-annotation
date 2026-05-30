@@ -30,5 +30,7 @@ Community plugins.
 - Live Preview: not supported yet
 - Source mode: shows original Markdown source
 - Links: skipped for v1 so anchors are not broken
+- Markdown inside annotation text, such as `[term]^^(**bold gloss**)`: not
+  supported in v1
 
 Use Reading view for smoke testing.
