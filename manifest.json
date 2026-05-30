@@ -1,0 +1,9 @@
+{
+  "id": "inline-annotation",
+  "name": "Inline Annotation",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Render Inline Annotation ruby, bouten, underline, and two-slot annotations in reading view.",
+  "author": "Baksi Li",
+  "isDesktopOnly": false
+}
