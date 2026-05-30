@@ -7,14 +7,20 @@
  * sizing and host-independent class-mode behavior.
  */
 
+body {
+  --ia-rt-font-size: 0.6em;
+  --ia-rt-line-height: 1;
+  --ia-underline-offset: 0.15em;
+}
+
 ruby.ia-ruby {
   display: ruby;
 }
 
 ruby.ia-ruby rt,
 ruby.ia-ruby rtc rt {
-  font-size: 0.6em;
-  line-height: 1;
+  font-size: var(--ia-rt-font-size);
+  line-height: var(--ia-rt-line-height);
 }
 
 ruby.ia-ruby.ia-ruby-over {
@@ -34,7 +40,7 @@ span.ia-bouten.ia-bouten-over {
 
 span.ia-bouten.ia-bouten-under {
   text-decoration: underline dotted;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }
 
 span.ia-bouten.ia-bouten-over.ia-bouten-under {
@@ -43,7 +49,7 @@ span.ia-bouten.ia-bouten-over.ia-bouten-under {
   text-emphasis-position: over right;
   -webkit-text-emphasis-position: over right;
   text-decoration: underline dotted;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }
 
 span.ia-bouten.ia-bouten-over.ia-underline {
@@ -52,17 +58,17 @@ span.ia-bouten.ia-bouten-over.ia-underline {
   text-emphasis-position: over right;
   -webkit-text-emphasis-position: over right;
   text-decoration-line: underline;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }
 
 span.ia-bouten.ia-bouten-under.ia-underline {
   text-decoration-line: underline;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }
 
 span.ia-underline {
   text-decoration-line: underline;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }
 
 .ia-underline-wavy {
@@ -82,10 +88,10 @@ ruby.ia-ruby-mixed.ia-bouten-over {
 
 ruby.ia-ruby-mixed.ia-bouten-under {
   text-decoration: underline dotted;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }
 
 ruby.ia-ruby-mixed.ia-underline {
   text-decoration-line: underline;
-  text-underline-offset: 0.15em;
+  text-underline-offset: var(--ia-underline-offset);
 }

@@ -53,6 +53,16 @@ Reading view smoke test. Avoid using the Logseq showcase as the primary Obsidian
 test file; it includes source/output pairs and Logseq-oriented edge cases that
 make Obsidian's reading view look noisier than real notes.
 
+The bundled stylesheet exposes a small customization surface for vault snippets:
+
+```css
+body {
+  --ia-rt-font-size: 0.65em;
+  --ia-rt-line-height: 1;
+  --ia-underline-offset: 0.15em;
+}
+```
+
 ## Obsidian Notes
 
 Only Reading view is supported in v1. Live Preview and Source mode may still show
@@ -67,6 +77,11 @@ Annotation text should be plain text in v1. Markdown inside an annotation, such
 as `[term]^^(**bold gloss**)`, may be split into multiple rendered DOM nodes by
 Obsidian before this plugin runs, so it is not supported by the reading-view
 postprocessor.
+
+Space-separated annotations are interpreted as per-character alignment when the
+part count matches the base character count. Use a hyphen or another visible
+separator for multi-word English glosses that should stay grouped, such as
+`[真值]^^(Truth-Value)`.
 
 ## Safety Model
 

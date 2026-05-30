@@ -1,5 +1,3 @@
-# Inline Annotation Smoke
-
 Use Reading view for this file. Live Preview and Source mode intentionally show
 the original source.
 
@@ -17,7 +15,7 @@ cat^_(/kæt/) renders ruby below.
 
 Frege 把「函數」描述為某種 [不飽和實體]^^(unsaturated entity)：它本身帶有「空位」，需要論元來「補足」才能產生一個完整的值。
 
-[對象]^^(Gegenstand)^_(Object)：任何可以單獨被指稱、作為論元的東西，包括普通個體、數、以及兩個特別的 [真值]^^(Truth Value) The True / The False。
+[對象]^^(Gegenstand)^_(Object)：任何可以單獨被指稱、作為論元的東西，包括普通個體、數、以及兩個特別的 [真值]^^(Truth-Value) The True / The False。
 
 重要語句^^(じゅうようごく|.-) can combine ruby and underline.
 

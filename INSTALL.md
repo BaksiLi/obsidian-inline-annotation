@@ -38,3 +38,11 @@ Use Reading view for smoke testing.
 For a focused test note, copy `examples/obsidian-smoke.md` into the vault and
 open it in Reading view. Passing `--examples` to the installer copies it as
 `inline-annotation smoke.md`.
+
+If ruby text appears too small for your Obsidian zoom/theme, add a CSS snippet:
+
+```css
+body {
+  --ia-rt-font-size: 0.65em;
+}
+```
