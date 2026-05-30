@@ -13,6 +13,13 @@ interface FixtureCorpus {
   }>;
 }
 
+const OBSIDIAN_SKIPPED_SHARED_FIXTURES = new Set([
+  "ruby-pipe-saturated-consumes-chain",
+  "align-per-character",
+  "align-auto-hide",
+  "align-two-level-per-character",
+]);
+
 function createRoot(html = ""): HTMLElement {
   const window = new Window();
   const root = window.document.createElement("div");
@@ -40,7 +47,10 @@ function assertNotContains(html: string, parts: string[] = []): void {
   for (const part of parts) assert.ok(!html.includes(part), `Unexpected ${part} in ${html}`);
 }
 
+let sharedFixturesRun = 0;
 for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
+  if (OBSIDIAN_SKIPPED_SHARED_FIXTURES.has(fixture.id)) continue;
+  sharedFixturesRun++;
   const root = createTextRoot(fixture.input);
   renderInlineAnnotationsInElement(root);
   const html = root.innerHTML;
@@ -53,6 +63,15 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
       `${fixture.id} expected ${count.pattern} count ${count.count} in ${html}`
     );
   }
+}
+
+{
+  const root = createTextRoot("[真值]^^(Truth Value)");
+  renderInlineAnnotationsInElement(root);
+  const html = root.innerHTML;
+
+  assert.ok(html.includes("<rt>Truth Value</rt>"));
+  assert.equal(html.split("<rt>").length - 1, 1);
 }
 
 {
@@ -116,4 +135,6 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
   assert.ok(root.innerHTML.includes("<strong>bold gloss</strong>"));
 }
 
-console.log(`Obsidian DOM postprocessor: ${(fixtureCorpus as FixtureCorpus).cases.length} shared fixtures passed`);
+console.log(
+  `Obsidian DOM postprocessor: ${sharedFixturesRun} shared fixtures passed, ${OBSIDIAN_SKIPPED_SHARED_FIXTURES.size} alignment-policy fixtures skipped`
+);

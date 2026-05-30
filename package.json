@@ -8,10 +8,11 @@
     "build": "node esbuild.config.mjs",
     "test": "node scripts/run-tests.mjs",
     "check": "npm run build && npm test && node scripts/check-package.mjs",
-    "install:vault": "npm run build && node scripts/install-vault.mjs"
+    "install:vault": "npm run build && node scripts/install-vault.mjs",
+    "update:core": "npm install markdown-it-inline-annotation@latest"
   },
   "dependencies": {
-    "markdown-it-inline-annotation": "^0.1.1"
+    "markdown-it-inline-annotation": "^0.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

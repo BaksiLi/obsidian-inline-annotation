@@ -8,6 +8,13 @@ npm run check
 npm run install:vault -- "/path/to/Vault" --clean --enable --examples
 ```
 
+To update the shared core before installing:
+
+```sh
+npm run update:core
+npm run check
+```
+
 The installer copies only:
 
 - `main.js`
@@ -30,6 +37,8 @@ Community plugins.
 - Live Preview: not supported yet
 - Source mode: shows original Markdown source
 - Links: skipped for v1 so anchors are not broken
+- Space-based per-character alignment: disabled in this adapter to preserve
+  multi-word glosses
 - Markdown inside annotation text, such as `[term]^^(**bold gloss**)`: not
   supported in v1
 

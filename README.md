@@ -17,10 +17,22 @@ syntax with `markdown-it-inline-annotation/core`.
 The adapter skips existing links, code, preformatted blocks, ruby elements,
 scripts, styles, and elements marked with `data-inline-annotation-ignore`.
 
+Space-based per-character alignment is disabled in this Obsidian adapter by
+default. Academic notes often contain multi-word glosses such as `Truth Value`,
+and Obsidian's reading-view adapter should prefer stable group ruby over
+surprising auto-alignment.
+
 ## Development
 
 ```sh
 npm install
+npm run check
+```
+
+To intentionally pick up the latest published core renderer:
+
+```sh
+npm run update:core
 npm run check
 ```
 
@@ -78,10 +90,10 @@ as `[term]^^(**bold gloss**)`, may be split into multiple rendered DOM nodes by
 Obsidian before this plugin runs, so it is not supported by the reading-view
 postprocessor.
 
-Space-separated annotations are interpreted as per-character alignment when the
-part count matches the base character count. Use a hyphen or another visible
-separator for multi-word English glosses that should stay grouped, such as
-`[真值]^^(Truth-Value)`.
+Space-based per-character alignment is intentionally disabled in this Obsidian
+adapter. The shared core still supports it for markdown-it and other adapters,
+but Obsidian reading view prioritizes multi-word glosses such as
+`[真值]^^(Truth Value)`.
 
 ## Safety Model
 

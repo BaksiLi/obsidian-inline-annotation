@@ -1,6 +1,13 @@
-import { findInlineAnnotation, renderInlineAnnotationsToHtml } from "markdown-it-inline-annotation/core";
+import {
+  findInlineAnnotation,
+  renderInlineAnnotationsToHtml,
+  type InlineAnnotationOptions,
+} from "markdown-it-inline-annotation/core";
 
 const SKIP_TAGS = new Set(["A", "CODE", "PRE", "RUBY", "SCRIPT", "STYLE", "TEXTAREA"]);
+const OBSIDIAN_RENDER_OPTIONS: InlineAnnotationOptions = {
+  enableSpaceAlignment: false,
+};
 
 export interface InlineAnnotationRenderStats {
   replacements: number;
@@ -11,7 +18,9 @@ export function renderInlineAnnotationsInElement(root: HTMLElement): InlineAnnot
   const nodeFilter = document.defaultView?.NodeFilter ?? NodeFilter;
   const walker = document.createTreeWalker(root, nodeFilter.SHOW_TEXT, {
     acceptNode(node) {
-      if (!node.nodeValue || !findInlineAnnotation(node.nodeValue)) return nodeFilter.FILTER_REJECT;
+      if (!node.nodeValue || !findInlineAnnotation(node.nodeValue, 0, node.nodeValue.length, OBSIDIAN_RENDER_OPTIONS)) {
+        return nodeFilter.FILTER_REJECT;
+      }
       const parent = node.parentElement;
       if (!parent || shouldSkipElement(parent, root)) return nodeFilter.FILTER_REJECT;
       return nodeFilter.FILTER_ACCEPT;
@@ -35,7 +44,7 @@ function shouldSkipElement(element: Element, root: Element): boolean {
 }
 
 function replaceTextNode(node: Text): void {
-  const html = renderInlineAnnotationsToHtml(node.nodeValue ?? "");
+  const html = renderInlineAnnotationsToHtml(node.nodeValue ?? "", OBSIDIAN_RENDER_OPTIONS);
   const template = node.ownerDocument.createElement("template");
   template.innerHTML = html;
   node.replaceWith(template.content);
