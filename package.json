@@ -4,6 +4,14 @@
   "private": true,
   "description": "Render Inline Annotation syntax in Obsidian reading view.",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaksiLi/obsidian-inline-annotation.git"
+  },
+  "homepage": "https://github.com/BaksiLi/obsidian-inline-annotation#readme",
+  "bugs": {
+    "url": "https://github.com/BaksiLi/obsidian-inline-annotation/issues"
+  },
   "scripts": {
     "build": "node esbuild.config.mjs",
     "test": "node scripts/run-tests.mjs",
