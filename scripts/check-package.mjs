@@ -7,7 +7,7 @@ const main = readFileSync(new URL("../main.js", import.meta.url), "utf8");
 
 assert.equal(manifest.id, "inline-annotation");
 assert.equal(manifest.version, pkg.version);
-assert.equal(pkg.dependencies?.["markdown-it-inline-annotation"], "^0.2.1");
+assert.equal(pkg.dependencies?.["markdown-it-inline-annotation"], "^0.3.0");
 assert.ok(existsSync(new URL("../main.js", import.meta.url)), "main.js must exist");
 assert.ok(existsSync(new URL("../styles.css", import.meta.url)), "styles.css must exist");
 assert.ok(existsSync(new URL("../versions.json", import.meta.url)), "versions.json must exist");

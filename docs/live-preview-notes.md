@@ -26,10 +26,9 @@ parentheses, or annotation text while leaving the base editable.
 
 ## Known Gaps
 
-- The scanner currently uses the published core HTML/range API. After
-  `markdown-it-inline-annotation@0.3.0` is published, Live Preview should switch
-  to `findInlineAnnotationModel` so decorations are built from the semantic
-  slot model.
+- The scanner uses the core annotation model. The first widget renderer still
+  renders that model back to HTML, but the range data now comes from semantic
+  slots rather than reparsing generated markup.
 - Source-mode/editor syntax awareness is minimal. Reading view skips rendered
   links and code after Obsidian's Markdown parser has handled them; Live Preview
   sees raw text and needs its own syntax-aware skip policy.

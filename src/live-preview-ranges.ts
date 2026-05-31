@@ -1,4 +1,9 @@
-import { findInlineAnnotation, type InlineAnnotationOptions } from "markdown-it-inline-annotation/core";
+import {
+  findInlineAnnotationModel,
+  renderInlineAnnotationModelToHtml,
+  type InlineAnnotationModel,
+  type InlineAnnotationOptions,
+} from "markdown-it-inline-annotation/core";
 import { OBSIDIAN_RENDER_OPTIONS } from "./render-options";
 
 export interface TextSelectionRange {
@@ -10,6 +15,7 @@ export interface InlineAnnotationLivePreviewRange {
   from: number;
   to: number;
   html: string;
+  model: InlineAnnotationModel;
   source: string;
 }
 
@@ -36,26 +42,27 @@ export function findInlineAnnotationLivePreviewRanges(
   let pos = 0;
 
   while (pos < text.length) {
-    const match = findInlineAnnotation(text, pos, text.length, options);
-    if (!match) break;
-    if (match.end <= pos) {
+    const model = findInlineAnnotationModel(text, pos, text.length, options);
+    if (!model) break;
+    if (model.end <= pos) {
       pos++;
       continue;
     }
 
-    const from = baseOffset + match.start;
-    const to = baseOffset + match.end;
+    const from = baseOffset + model.start;
+    const to = baseOffset + model.end;
 
     if (!touchesSelection(from, to, selections)) {
       ranges.push({
         from,
         to,
-        html: match.html,
-        source: match.source,
+        html: renderInlineAnnotationModelToHtml(model, options),
+        model,
+        source: model.source,
       });
     }
 
-    pos = match.end;
+    pos = model.end;
   }
 
   return ranges;

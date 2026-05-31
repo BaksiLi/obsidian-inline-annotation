@@ -7,6 +7,8 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   assert.equal(ranges.length, 2);
   assert.equal(ranges[0].from, 2);
   assert.equal(ranges[0].source, "[漢字]^^(かんじ)");
+  assert.equal(ranges[0].model.base.raw, "漢字");
+  assert.equal(ranges[0].model.slots[0].position, "over");
   assert.ok(ranges[0].html.includes("<rt>かんじ</rt>"));
   assert.equal(ranges[1].source, "[base]^_(.-)");
   assert.ok(ranges[1].html.includes("ia-underline"));
@@ -18,6 +20,14 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   const ranges = findInlineAnnotationLivePreviewRanges(source, [{ from: cursorInside, to: cursorInside }]);
 
   assert.equal(ranges.length, 0);
+}
+
+{
+  const ranges = findInlineAnnotationLivePreviewRanges("[a]^^(x|y|z)");
+
+  assert.equal(ranges.length, 1);
+  assert.deepEqual(ranges[0].model.overflow.map((range) => range.raw), ["|z"]);
+  assert.ok(ranges[0].html.includes("|z"));
 }
 
 {
