@@ -33,11 +33,16 @@ function buildDecorations(view: EditorView): DecorationSet {
 
   const builder = new RangeSetBuilder<Decoration>();
   const selections = view.state.selection.ranges.map((range) => ({ from: range.from, to: range.to }));
+  const seen = new Set<number>();
 
   for (const visibleRange of view.visibleRanges) {
-    const text = view.state.doc.sliceString(visibleRange.from, visibleRange.to);
-    const ranges = findInlineAnnotationLivePreviewRanges(text, selections, undefined, visibleRange.from);
+    const from = view.state.doc.lineAt(visibleRange.from).from;
+    const to = view.state.doc.lineAt(visibleRange.to).to;
+    const text = view.state.doc.sliceString(from, to);
+    const ranges = findInlineAnnotationLivePreviewRanges(text, selections, undefined, from);
     for (const range of ranges) {
+      if (seen.has(range.from)) continue;
+      seen.add(range.from);
       builder.add(
         range.from,
         range.to,
