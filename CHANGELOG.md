@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Add an early Live Preview CodeMirror extension. It renders annotations as
+  replacement widgets while the cursor is outside the source span, and reveals
+  the original source while editing.
+- Keep `@codemirror/state` and `@codemirror/view` external so the plugin uses
+  Obsidian's editor runtime instead of bundling a second CodeMirror instance.
+- Add pure Live Preview range tests and complete overline class-mode CSS.
+
 ## 0.2.1
 
 - Track `markdown-it-inline-annotation@0.2.1`.

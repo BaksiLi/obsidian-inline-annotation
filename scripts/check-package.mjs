@@ -12,6 +12,8 @@ assert.ok(existsSync(new URL("../main.js", import.meta.url)), "main.js must exis
 assert.ok(existsSync(new URL("../styles.css", import.meta.url)), "styles.css must exist");
 assert.ok(existsSync(new URL("../versions.json", import.meta.url)), "versions.json must exist");
 assert.ok(!main.includes("require(\"markdown-it-inline-annotation"), "core dependency should be bundled");
+assert.ok(main.includes("require(\"@codemirror/view\")"), "CodeMirror view should stay external");
+assert.ok(main.includes("require(\"@codemirror/state\")"), "CodeMirror state should stay external");
 assert.ok(!main.includes("previewScripts"), "Obsidian adapter must not inject preview scripts");
 
 console.log("Obsidian package checks passed");

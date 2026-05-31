@@ -8,7 +8,7 @@ await esbuild.build({
   },
   bundle: true,
   entryPoints: ["src/main.ts"],
-  external: ["obsidian"],
+  external: ["obsidian", "@codemirror/state", "@codemirror/view"],
   format: "cjs",
   logLevel: "info",
   minify: prod,

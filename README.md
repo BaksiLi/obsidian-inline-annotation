@@ -1,15 +1,15 @@
 # Inline Annotation for Obsidian
 
-Reading-view Obsidian adapter for Inline Annotation.
+Obsidian adapter for Inline Annotation.
 
-The current adapter is intentionally narrow. It registers a Markdown
-postprocessor, scans text nodes in reading view, and renders Inline Annotation
-v2 syntax with `markdown-it-inline-annotation/core`.
+The current adapter registers a Markdown postprocessor for Reading view and a
+CodeMirror extension for Live Preview. Both paths render Inline Annotation v2
+syntax with `markdown-it-inline-annotation/core`.
 
 ## Scope
 
 - Reading view: yes
-- Live Preview editing: no
+- Live Preview editing: prototype
 - editor commands: no
 - external resources: no
 - custom network access: no
@@ -37,7 +37,8 @@ npm run check
 ```
 
 The package bundles `markdown-it-inline-annotation` into `main.js` and keeps
-`obsidian` external, matching normal Obsidian plugin packaging.
+`obsidian` plus Obsidian's CodeMirror packages external. This avoids loading a
+second `@codemirror/state` instance into the editor.
 
 `npm run check` builds the plugin, runs DOM postprocessor fixtures with
 `happy-dom`, and verifies package boundaries. The DOM fixtures include the shared
@@ -77,8 +78,10 @@ body {
 
 ## Obsidian Notes
 
-Only Reading view is supported. Live Preview and Source mode may still show the
-original source syntax.
+Reading view is supported. Live Preview has an early replacement-widget
+prototype: annotations render when the cursor is outside the source span, and
+the original source reappears while the cursor or selection touches it. Source
+mode shows original Markdown source.
 
 Obsidian parses Markdown before this plugin runs. That means normal Markdown and
 Obsidian link syntax may already have become `<a>` elements by the time the

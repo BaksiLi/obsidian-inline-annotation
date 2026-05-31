@@ -71,11 +71,28 @@ span.ia-underline {
   text-underline-offset: var(--ia-underline-offset);
 }
 
+span.ia-overline {
+  text-decoration-line: overline;
+}
+
+span.ia-overline.ia-underline {
+  text-decoration-line: overline underline;
+  text-underline-offset: var(--ia-underline-offset);
+}
+
 .ia-underline-wavy {
   text-decoration-style: wavy;
 }
 
+.ia-overline-wavy {
+  text-decoration-style: wavy;
+}
+
 .ia-underline-double {
+  text-decoration-style: double;
+}
+
+.ia-overline-double {
   text-decoration-style: double;
 }
 
@@ -94,4 +111,17 @@ ruby.ia-ruby-mixed.ia-bouten-under {
 ruby.ia-ruby-mixed.ia-underline {
   text-decoration-line: underline;
   text-underline-offset: var(--ia-underline-offset);
+}
+
+ruby.ia-ruby-mixed.ia-overline {
+  text-decoration-line: overline;
+}
+
+ruby.ia-ruby-mixed.ia-overline.ia-underline {
+  text-decoration-line: overline underline;
+  text-underline-offset: var(--ia-underline-offset);
+}
+
+.ia-live-preview-widget {
+  display: inline;
 }

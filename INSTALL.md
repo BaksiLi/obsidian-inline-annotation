@@ -34,7 +34,7 @@ Community plugins.
 ## Current Scope
 
 - Reading view: supported
-- Live Preview: not supported yet
+- Live Preview: early prototype
 - Source mode: shows original Markdown source
 - Links: skipped so anchors are not broken
 - Space-based per-character alignment: conservative auto mode preserves
