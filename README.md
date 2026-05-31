@@ -42,7 +42,8 @@ second `@codemirror/state` instance into the editor.
 
 `npm run check` builds the plugin, runs DOM postprocessor fixtures with
 `happy-dom`, and verifies package boundaries. The DOM fixtures include the shared
-Inline Annotation HTML corpus plus Obsidian-specific skip behavior for links,
+Inline Annotation HTML corpus, skip shared `rendering-policy` cases that require
+always-on space alignment, and add Obsidian-specific skip behavior for links,
 code, preformatted blocks, existing ruby, scripts, styles, textareas, and
 `data-inline-annotation-ignore`.
 

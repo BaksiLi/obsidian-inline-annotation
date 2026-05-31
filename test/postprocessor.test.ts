@@ -6,19 +6,27 @@ import { renderInlineAnnotationsInElement } from "../src/postprocessor";
 interface FixtureCorpus {
   cases: Array<{
     id: string;
+    assertionType?: "semantic" | "rendering-policy" | "host-skip";
     input: string;
+    options?: { spaceAlignment?: string };
     contains?: string[];
     notContains?: string[];
     counts?: Array<{ pattern: string; count: number }>;
   }>;
 }
 
-const OBSIDIAN_SKIPPED_SHARED_FIXTURES = new Set([
+const OBSIDIAN_LEGACY_SKIPPED_SHARED_FIXTURES = new Set([
+  // markdown-it-inline-annotation@0.3.0 couples this capacity assertion to
+  // always-on space alignment. The canonical fixture has been narrowed after
+  // 0.3.0 so future published corpora can run it as semantic.
   "ruby-pipe-saturated-passes-through",
-  "align-per-character",
-  "align-auto-hide",
-  "align-two-level-per-character",
 ]);
+
+function shouldSkipSharedFixture(fixture: FixtureCorpus["cases"][number]): boolean {
+  if (fixture.assertionType === "host-skip") return true;
+  if (fixture.assertionType === "rendering-policy" && fixture.options?.spaceAlignment === "always") return true;
+  return OBSIDIAN_LEGACY_SKIPPED_SHARED_FIXTURES.has(fixture.id);
+}
 
 function createRoot(html = ""): HTMLElement {
   const window = new Window();
@@ -48,8 +56,12 @@ function assertNotContains(html: string, parts: string[] = []): void {
 }
 
 let sharedFixturesRun = 0;
+let sharedFixturesSkipped = 0;
 for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
-  if (OBSIDIAN_SKIPPED_SHARED_FIXTURES.has(fixture.id)) continue;
+  if (shouldSkipSharedFixture(fixture)) {
+    sharedFixturesSkipped++;
+    continue;
+  }
   sharedFixturesRun++;
   const root = createTextRoot(fixture.input);
   renderInlineAnnotationsInElement(root);
@@ -148,5 +160,5 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
 }
 
 console.log(
-  `Obsidian DOM postprocessor: ${sharedFixturesRun} shared fixtures passed, ${OBSIDIAN_SKIPPED_SHARED_FIXTURES.size} alignment-policy fixtures skipped`
+  `Obsidian DOM postprocessor: ${sharedFixturesRun} shared fixtures passed, ${sharedFixturesSkipped} shared fixtures skipped`
 );
