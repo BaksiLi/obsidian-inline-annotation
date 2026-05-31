@@ -14,6 +14,8 @@ source document, selection, and incremental viewport rendering.
   annotation range.
 - Keeps `@codemirror/state` and `@codemirror/view` external so the extension
   uses Obsidian's editor runtime.
+- Resets leaked Markdown emphasis after hidden source spans that may expose
+  delimiters such as `^_(...)` or `*` on the same visual line.
 
 ## Why Replacement Widgets First
 
@@ -32,6 +34,9 @@ parentheses, or annotation text while leaving the base editable.
 - Source-mode/editor syntax awareness is minimal. Reading view skips rendered
   links and code after Obsidian's Markdown parser has handled them; Live Preview
   sees raw text and needs its own syntax-aware skip policy.
+- The emphasis reset is a targeted prototype shield. It can also suppress
+  intentional Markdown emphasis later on the same line; a syntax tree-aware
+  implementation should replace it.
 - Widgets are not yet tuned for cursor motion, IME composition, or partial
   selection ergonomics.
 - No commands or settings are exposed yet.

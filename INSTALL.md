@@ -8,6 +8,15 @@ npm run check
 npm run install:vault -- "/path/to/Vault" --clean --enable --examples
 ```
 
+For repeat installs into the same vault, you can also set the vault path once
+per shell:
+
+```sh
+export OBSIDIAN_VAULT="/path/to/Vault"
+npm run check
+npm run install:vault -- --clean --enable --examples
+```
+
 To update the shared core before installing:
 
 ```sh
@@ -30,6 +39,13 @@ It installs to:
 
 Then reload Obsidian, or disable and re-enable **Inline Annotation** in
 Community plugins.
+
+If the plugin appears unchanged after reinstalling, verify that Obsidian is
+opening the same vault path and that the installed directory is:
+
+```text
+<vault>/.obsidian/plugins/inline-annotation/
+```
 
 ## Current Scope
 

@@ -51,6 +51,15 @@ function buildDecorations(view: EditorView): DecorationSet {
           inclusive: false,
         })
       );
+      if (range.resetMarkdownEmphasisAfter && range.to < to) {
+        builder.add(
+          range.to,
+          to,
+          Decoration.mark({
+            class: "ia-live-preview-markdown-reset",
+          })
+        );
+      }
     }
   }
 

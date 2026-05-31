@@ -9,8 +9,10 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   assert.equal(ranges[0].source, "[漢字]^^(かんじ)");
   assert.equal(ranges[0].model.base.raw, "漢字");
   assert.equal(ranges[0].model.slots[0].position, "over");
+  assert.equal(ranges[0].resetMarkdownEmphasisAfter, false);
   assert.ok(ranges[0].html.includes("<rt>かんじ</rt>"));
   assert.equal(ranges[1].source, "[base]^_(.-)");
+  assert.equal(ranges[1].resetMarkdownEmphasisAfter, true);
   assert.ok(ranges[1].html.includes("ia-underline"));
 }
 
@@ -43,6 +45,22 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   const ranges = findInlineAnnotationLivePreviewRanges("[漢字]^^(かんじ)", [{ from: 12, to: 12 }], undefined, 10);
 
   assert.equal(ranges.length, 0);
+}
+
+{
+  const ranges = findInlineAnnotationLivePreviewRanges(
+    "[對象]^^(Gegenstand)^_(Object)：任何可以單獨被指稱、作為論元的東西"
+  );
+
+  assert.equal(ranges.length, 1);
+  assert.equal(ranges[0].resetMarkdownEmphasisAfter, true);
+}
+
+{
+  const ranges = findInlineAnnotationLivePreviewRanges("[term]^^(*gloss)");
+
+  assert.equal(ranges.length, 1);
+  assert.equal(ranges[0].resetMarkdownEmphasisAfter, true);
 }
 
 console.log("Obsidian Live Preview range tests passed");

@@ -62,6 +62,18 @@ With `--examples`, it copies `examples/obsidian-smoke.md` into the vault as
 After installing, reload Obsidian or disable and re-enable the plugin so Obsidian
 loads the latest `main.js` and `styles.css`.
 
+For repeated local testing, the whole loop is:
+
+```sh
+npm run check
+npm run install:vault -- "/path/to/Vault" --clean --enable --examples
+```
+
+The installed plugin directory is always
+`<vault>/.obsidian/plugins/inline-annotation/`. If Obsidian still shows an older
+build, first check that the currently opened vault is the same path you passed
+to the installer.
+
 Use [examples/obsidian-smoke.md](./examples/obsidian-smoke.md) for a focused
 Reading view smoke test. Avoid using the Logseq showcase as the primary Obsidian
 test file; it includes source/output pairs and Logseq-oriented edge cases that
@@ -84,6 +96,11 @@ prototype: annotations render when the cursor is outside the source span, and
 the original source reappears while the cursor or selection touches it. Source
 mode shows original Markdown source. See [docs/live-preview-notes.md](./docs/live-preview-notes.md)
 for the current tradeoffs and next shape.
+
+Live Preview includes a small emphasis shield: when hidden source text may leak
+Markdown emphasis, such as `^_(...)` or annotation text containing `*`, the
+adapter resets leaked emphasis on the rest of that visual line. This compensates
+for Obsidian parsing Markdown before our widget replacement runs.
 
 Obsidian parses Markdown before this plugin runs. That means normal Markdown and
 Obsidian link syntax may already have become `<a>` elements by the time the

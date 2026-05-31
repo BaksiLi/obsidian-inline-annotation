@@ -125,3 +125,8 @@ ruby.ia-ruby-mixed.ia-overline.ia-underline {
 .ia-live-preview-widget {
   display: inline;
 }
+
+.ia-live-preview-markdown-reset,
+.ia-live-preview-markdown-reset .cm-em {
+  font-style: normal !important;
+}

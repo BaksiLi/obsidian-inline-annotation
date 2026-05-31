@@ -3,6 +3,7 @@
 ## 0.3.0
 
 - Track `markdown-it-inline-annotation@0.3.0`.
+- Reset leaked Live Preview Markdown emphasis after hidden source delimiters.
 - Add an early Live Preview CodeMirror extension. It renders annotations as
   replacement widgets while the cursor is outside the source span, and reveals
   the original source while editing.

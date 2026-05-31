@@ -16,6 +16,7 @@ export interface InlineAnnotationLivePreviewRange {
   to: number;
   html: string;
   model: InlineAnnotationModel;
+  resetMarkdownEmphasisAfter: boolean;
   source: string;
 }
 
@@ -30,6 +31,10 @@ function touchesSelection(from: number, to: number, selections: readonly TextSel
     }
   }
   return false;
+}
+
+function mayLeakMarkdownEmphasis(source: string): boolean {
+  return source.includes("^_(") || source.includes("*");
 }
 
 export function findInlineAnnotationLivePreviewRanges(
@@ -58,6 +63,7 @@ export function findInlineAnnotationLivePreviewRanges(
         to,
         html: renderInlineAnnotationModelToHtml(model, options),
         model,
+        resetMarkdownEmphasisAfter: mayLeakMarkdownEmphasis(model.source),
         source: model.source,
       });
     }
