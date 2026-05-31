@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-ranges";
 
 {
@@ -61,6 +62,44 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
 
   assert.equal(ranges.length, 1);
   assert.equal(ranges[0].resetMarkdownEmphasisAfter, true);
+}
+
+{
+  const ranges = findInlineAnnotationLivePreviewRanges(
+    [
+      "`[code]^^(ann)`",
+      "[link [term]^^(ann)](https://example.com)",
+      "![[image [term]^^(ann).png]]",
+      "$[math]^^(ann)$",
+      "<span title=\"[html]^^(ann)\">",
+      "[text]^^(ann)",
+    ].join(" ")
+  );
+
+  assert.equal(ranges.length, 1);
+  assert.equal(ranges[0].source, "[text]^^(ann)");
+}
+
+{
+  const ranges = findInlineAnnotationLivePreviewRanges("[[護]^^(まも)れ]^_(プロテゴ)");
+
+  assert.equal(ranges.length, 1);
+  assert.equal(ranges[0].source, "[[護]^^(まも)れ]^_(プロテゴ)");
+}
+
+{
+  const showcase = readFileSync("examples/obsidian-showcase.md", "utf8");
+  const ranges = showcase.split(/\r?\n/).flatMap((line) => findInlineAnnotationLivePreviewRanges(line));
+  const sources = ranges.map((range) => range.source);
+
+  assert.ok(sources.includes("[對象]^^(Gegenstand)^_(Object)"));
+  assert.ok(sources.includes("[取り返す]^^(と り かえ す)"));
+  assert.ok(sources.includes("[[護]^^(まも)れ]^_(プロテゴ)"));
+  assert.ok(sources.includes("[a]^^(x|y|z)"));
+  assert.ok(!sources.includes("[term]^^(**bold gloss**)"));
+  assert.ok(!sources.includes("[code]^^(ann)"));
+  assert.ok(!sources.includes("[math]^^(ann)"));
+  assert.ok(!sources.includes("[term]^^(ann)"));
 }
 
 console.log("Obsidian Live Preview range tests passed");

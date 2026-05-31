@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 const manifest = JSON.parse(readFileSync(new URL("../manifest.json", import.meta.url), "utf8"));
 const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 const main = readFileSync(new URL("../main.js", import.meta.url), "utf8");
+const buildConfig = readFileSync(new URL("../esbuild.config.mjs", import.meta.url), "utf8");
 
 assert.equal(manifest.id, "inline-annotation");
 assert.equal(manifest.version, pkg.version);
@@ -13,7 +14,8 @@ assert.ok(existsSync(new URL("../styles.css", import.meta.url)), "styles.css mus
 assert.ok(existsSync(new URL("../versions.json", import.meta.url)), "versions.json must exist");
 assert.ok(!main.includes("require(\"markdown-it-inline-annotation"), "core dependency should be bundled");
 assert.ok(main.includes("require(\"@codemirror/view\")"), "CodeMirror view should stay external");
-assert.ok(main.includes("require(\"@codemirror/state\")"), "CodeMirror state should stay external");
+assert.ok(buildConfig.includes("\"@codemirror/state\""), "CodeMirror state should stay external if used");
+assert.ok(buildConfig.includes("\"@codemirror/view\""), "CodeMirror view should stay external");
 assert.ok(!main.includes("previewScripts"), "Obsidian adapter must not inject preview scripts");
 
 console.log("Obsidian package checks passed");

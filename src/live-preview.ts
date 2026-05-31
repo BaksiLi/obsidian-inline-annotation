@@ -1,4 +1,4 @@
-import { RangeSetBuilder, type Extension } from "@codemirror/state";
+import type { Extension, Range } from "@codemirror/state";
 import { Decoration, type DecorationSet, EditorView, ViewPlugin, type ViewUpdate, WidgetType } from "@codemirror/view";
 import { editorLivePreviewField } from "obsidian";
 import { findInlineAnnotationLivePreviewRanges } from "./live-preview-ranges";
@@ -31,7 +31,7 @@ function livePreviewEnabled(view: EditorView): boolean {
 function buildDecorations(view: EditorView): DecorationSet {
   if (!livePreviewEnabled(view)) return Decoration.none;
 
-  const builder = new RangeSetBuilder<Decoration>();
+  const decorations: Range<Decoration>[] = [];
   const selections = view.state.selection.ranges.map((range) => ({ from: range.from, to: range.to }));
   const seen = new Set<number>();
 
@@ -43,27 +43,23 @@ function buildDecorations(view: EditorView): DecorationSet {
     for (const range of ranges) {
       if (seen.has(range.from)) continue;
       seen.add(range.from);
-      builder.add(
-        range.from,
-        range.to,
+      decorations.push(
         Decoration.replace({
           widget: new InlineAnnotationWidget(range.html),
           inclusive: false,
-        })
+        }).range(range.from, range.to)
       );
       if (range.resetMarkdownEmphasisAfter && range.to < to) {
-        builder.add(
-          range.to,
-          to,
+        decorations.push(
           Decoration.mark({
             class: "ia-live-preview-markdown-reset",
-          })
+          }).range(range.to, to)
         );
       }
     }
   }
 
-  return builder.finish();
+  return Decoration.set(decorations, true);
 }
 
 class InlineAnnotationLivePreviewPlugin {

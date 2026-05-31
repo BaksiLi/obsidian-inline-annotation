@@ -1,5 +1,5 @@
-Use Reading view for this file. Live Preview and Source mode intentionally show
-the original source.
+Use Reading view or Live Preview for this focused smoke file. Source mode
+intentionally shows the original source.
 
 ## Core
 
@@ -32,15 +32,7 @@ glosses remain grouped while phonetic readings can align:
 
 ## Known Limits
 
-Markdown inside annotation text is not supported in Obsidian Reading view v1:
-
-`[term]^^(**bold gloss**)`
-
-[term]^^(**bold gloss**)
-
-Markdown inside the abbreviated base is also not supported in Obsidian Reading
-view v1:
-
-`**H**₂O^^(**Hydrogen** Dioxide)`
-
-**H**₂O^^(**Hydrogen** Dioxide)
+Host-owned Markdown structures such as inline code, links, wiki links, math,
+and complex Markdown inside the base are intentionally left out of this smoke
+file. They need syntax-aware editor integration rather than more visual
+workarounds.

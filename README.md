@@ -56,8 +56,8 @@ npm run install:vault -- "/path/to/Vault" --clean --enable --examples
 This copies only `main.js`, `manifest.json`, `versions.json`, and `styles.css`.
 With `--enable`, it also adds `inline-annotation` to the vault's
 `.obsidian/community-plugins.json`.
-With `--examples`, it copies `examples/obsidian-smoke.md` into the vault as
-`inline-annotation smoke.md`.
+With `--examples`, it copies the maintained smoke and showcase notes into the
+vault as `inline-annotation smoke.md` and `inline-annotation showcase.md`.
 
 After installing, reload Obsidian or disable and re-enable the plugin so Obsidian
 loads the latest `main.js` and `styles.css`.
@@ -75,9 +75,11 @@ build, first check that the currently opened vault is the same path you passed
 to the installer.
 
 Use [examples/obsidian-smoke.md](./examples/obsidian-smoke.md) for a focused
-Reading view smoke test. Avoid using the Logseq showcase as the primary Obsidian
-test file; it includes source/output pairs and Logseq-oriented edge cases that
-make Obsidian's reading view look noisier than real notes.
+smoke test and [examples/obsidian-showcase.md](./examples/obsidian-showcase.md)
+for a broader Reading view / Live Preview pass. Avoid using the Logseq showcase
+as the primary Obsidian test file; it includes source/output pairs and
+Logseq-oriented edge cases that make Obsidian's views look noisier than real
+notes.
 
 The bundled stylesheet exposes a small customization surface for vault snippets:
 

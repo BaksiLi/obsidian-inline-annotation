@@ -37,7 +37,7 @@ if (examples) installExamples(vaultDir);
 
 console.log(`Installed ${manifest.id} to ${pluginDir}`);
 if (enable) console.log(`Enabled ${manifest.id} in ${path.join(vaultDir, ".obsidian", "community-plugins.json")}`);
-if (examples) console.log(`Installed examples to ${path.join(vaultDir, "inline-annotation smoke.md")}`);
+if (examples) console.log(`Installed examples to ${vaultDir}`);
 
 function resolvePluginDir(target) {
   if (existsSync(path.join(target, "manifest.json"))) return target;
@@ -73,4 +73,8 @@ function enablePlugin(vaultDir) {
 
 function installExamples(vaultDir) {
   cpSync(path.join(sourceRoot, "examples", "obsidian-smoke.md"), path.join(vaultDir, "inline-annotation smoke.md"));
+  cpSync(
+    path.join(sourceRoot, "examples", "obsidian-showcase.md"),
+    path.join(vaultDir, "inline-annotation showcase.md")
+  );
 }

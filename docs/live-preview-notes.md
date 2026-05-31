@@ -31,12 +31,16 @@ parentheses, or annotation text while leaving the base editable.
 - The scanner uses the core annotation model. The first widget renderer still
   renders that model back to HTML, but the range data now comes from semantic
   slots rather than reparsing generated markup.
-- Source-mode/editor syntax awareness is minimal. Reading view skips rendered
-  links and code after Obsidian's Markdown parser has handled them; Live Preview
-  sees raw text and needs its own syntax-aware skip policy.
+- Source-mode/editor syntax awareness is still shallow. Live Preview has a
+  line-level skip pass for obvious host syntax, but reliable handling of inline
+  code, Markdown links, wiki links, math, HTML, and fenced code should come from
+  CodeMirror syntax-tree data rather than more hand-written Markdown scanning.
 - The emphasis reset is a targeted prototype shield. It can also suppress
   intentional Markdown emphasis later on the same line; a syntax tree-aware
   implementation should replace it.
+- Reading view and Live Preview do not yet support complex Markdown inside the
+  annotated base or annotation text. Some host-rendered DOM shapes can split the
+  source before the adapter sees it.
 - Widgets are not yet tuned for cursor motion, IME composition, or partial
   selection ergonomics.
 - No commands or settings are exposed yet.

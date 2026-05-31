@@ -60,9 +60,12 @@ opening the same vault path and that the installed directory is:
 
 Use Reading view for smoke testing.
 
-For a focused test note, copy `examples/obsidian-smoke.md` into the vault and
-open it in Reading view. Passing `--examples` to the installer copies it as
-`inline-annotation smoke.md`.
+For focused test notes, pass `--examples` to copy:
+
+- `inline-annotation smoke.md`
+- `inline-annotation showcase.md`
+
+Open them in Reading view and Live Preview after reloading the plugin.
 
 If ruby text appears too small for your Obsidian zoom/theme, add a CSS snippet:
 
