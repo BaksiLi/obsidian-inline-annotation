@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import {
+  collectFallbackHostMarkdownRanges,
+  mergeSourceRanges,
+} from "../src/live-preview-host-syntax";
 import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-ranges";
 
 {
@@ -78,6 +82,26 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
 
   assert.equal(ranges.length, 1);
   assert.equal(ranges[0].source, "[text]^^(ann)");
+}
+
+{
+  const ranges = findInlineAnnotationLivePreviewRanges(
+    "skip [a]^^(x) keep [b]^^(y)",
+    [],
+    undefined,
+    0,
+    [{ from: 0, to: "skip [a]^^(x)".length }]
+  );
+
+  assert.equal(ranges.length, 1);
+  assert.equal(ranges[0].source, "[b]^^(y)");
+}
+
+{
+  assert.deepEqual(mergeSourceRanges([{ from: 6, to: 10 }, { from: 0, to: 4 }, { from: 3, to: 7 }]), [
+    { from: 0, to: 10 },
+  ]);
+  assert.deepEqual(collectFallbackHostMarkdownRanges("`[code]^^(ann)` [text]^^(ann)"), [{ from: 0, to: 15 }]);
 }
 
 {
