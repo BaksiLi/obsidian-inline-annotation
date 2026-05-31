@@ -81,7 +81,8 @@ body {
 Reading view is supported. Live Preview has an early replacement-widget
 prototype: annotations render when the cursor is outside the source span, and
 the original source reappears while the cursor or selection touches it. Source
-mode shows original Markdown source.
+mode shows original Markdown source. See [docs/live-preview-notes.md](./docs/live-preview-notes.md)
+for the current tradeoffs and next shape.
 
 Obsidian parses Markdown before this plugin runs. That means normal Markdown and
 Obsidian link syntax may already have become `<a>` elements by the time the
