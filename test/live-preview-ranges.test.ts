@@ -4,6 +4,7 @@ import {
   collectFallbackHostMarkdownRanges,
   mergeSourceRanges,
 } from "../src/live-preview-host-syntax";
+import { planInlineAnnotationLivePreviewDecorations } from "../src/live-preview-decoration-plan";
 import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-ranges";
 
 {
@@ -53,12 +54,15 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
 }
 
 {
-  const ranges = findInlineAnnotationLivePreviewRanges(
-    "[對象]^^(Gegenstand)^_(Object)：任何可以單獨被指稱、作為論元的東西"
-  );
+  const source = "[對象]^^(Gegenstand)^_(Object)：任何可以單獨被指稱、作為論元的東西";
+  const ranges = findInlineAnnotationLivePreviewRanges(source);
 
   assert.equal(ranges.length, 1);
   assert.equal(ranges[0].resetMarkdownEmphasisAfter, true);
+  assert.deepEqual(
+    planInlineAnnotationLivePreviewDecorations(ranges, source.length).map((plan) => plan.type),
+    ["replace", "reset-emphasis"]
+  );
 }
 
 {

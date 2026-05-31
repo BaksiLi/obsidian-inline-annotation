@@ -22,6 +22,9 @@ source document, selection, and incremental viewport rendering.
 - The ViewPlugin now asks for host syntax ranges before invoking the annotation
   scanner. The planned syntax-tree integration should replace
   `collectHostSyntaxRangesForLine`, not the model scanner.
+- Replacement/reset decisions are planned as pure data before they become
+  CodeMirror `Decoration` objects, so editor behavior can gain tests without
+  depending on Obsidian UI automation.
 
 ## Why Replacement Widgets First
 

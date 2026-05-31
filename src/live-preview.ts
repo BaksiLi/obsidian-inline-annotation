@@ -5,6 +5,7 @@ import {
   collectFallbackHostMarkdownRanges,
   type SourceRange,
 } from "./live-preview-host-syntax";
+import { planInlineAnnotationLivePreviewDecorations } from "./live-preview-decoration-plan";
 import { findInlineAnnotationLivePreviewRanges } from "./live-preview-ranges";
 
 class InlineAnnotationWidget extends WidgetType {
@@ -52,17 +53,20 @@ function buildDecorations(view: EditorView): DecorationSet {
     for (const range of ranges) {
       if (seen.has(range.from)) continue;
       seen.add(range.from);
-      decorations.push(
-        Decoration.replace({
-          widget: new InlineAnnotationWidget(range.html),
-          inclusive: false,
-        }).range(range.from, range.to)
-      );
-      if (range.resetMarkdownEmphasisAfter && range.to < to) {
+      for (const plan of planInlineAnnotationLivePreviewDecorations([range], to)) {
+        if (plan.type === "replace") {
+          decorations.push(
+            Decoration.replace({
+              widget: new InlineAnnotationWidget(plan.html),
+              inclusive: false,
+            }).range(plan.from, plan.to)
+          );
+          continue;
+        }
         decorations.push(
           Decoration.mark({
             class: "ia-live-preview-markdown-reset",
-          }).range(range.to, to)
+          }).range(plan.from, plan.to)
         );
       }
     }
