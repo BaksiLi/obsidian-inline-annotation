@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+- Track `markdown-it-inline-annotation@0.2.1`.
+- Use the shared core's conservative `spaceAlignment: "auto"` policy in Reading
+  view, keeping plain multi-word glosses grouped while aligning phonetic
+  readings such as `[取り返す]^^(と り かえ す)`.
+
 ## 0.2.0
 
 - Track Inline Annotation v2 via `markdown-it-inline-annotation@0.2.0`.

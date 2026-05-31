@@ -36,11 +36,11 @@ Community plugins.
 - Reading view: supported
 - Live Preview: not supported yet
 - Source mode: shows original Markdown source
-- Links: skipped for v1 so anchors are not broken
-- Space-based per-character alignment: disabled in this adapter to preserve
-  multi-word glosses
+- Links: skipped so anchors are not broken
+- Space-based per-character alignment: conservative auto mode preserves
+  multi-word glosses while aligning phonetic readings
 - Markdown inside annotation text, such as `[term]^^(**bold gloss**)`: not
-  supported in v1
+  supported
 
 Use Reading view for smoke testing.
 

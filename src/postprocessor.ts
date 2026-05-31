@@ -6,7 +6,7 @@ import {
 
 const SKIP_TAGS = new Set(["A", "CODE", "PRE", "RUBY", "SCRIPT", "STYLE", "TEXTAREA"]);
 const OBSIDIAN_RENDER_OPTIONS: InlineAnnotationOptions = {
-  enableSpaceAlignment: false,
+  spaceAlignment: "auto",
 };
 
 export interface InlineAnnotationRenderStats {

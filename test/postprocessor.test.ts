@@ -75,6 +75,18 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
 }
 
 {
+  const root = createTextRoot("[取り返す]^^(と り かえ す)");
+  renderInlineAnnotationsInElement(root);
+  const html = root.innerHTML;
+
+  assert.ok(html.includes("<rt>と</rt>"));
+  assert.ok(html.includes("り<rp>(</rp><rt></rt>"));
+  assert.ok(html.includes("<rt>かえ</rt>"));
+  assert.ok(html.includes("す<rp>(</rp><rt></rt>"));
+  assert.equal(html.split("<ruby").length - 1, 4);
+}
+
+{
   const root = createRoot("<p><code></code> <a href=\"https://example.com\"></a> <span></span></p>");
   root.querySelector("code")!.textContent = "[code]^^(ann)";
   root.querySelector("a")!.textContent = "[link]^^(ann)";
