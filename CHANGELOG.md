@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.1
+
+- Prepare the Live Preview scanner for syntax-tree host ranges by separating
+  annotation scanning from host-owned Markdown range detection.
+- Keep a fallback host syntax scanner for obvious inline code, links, wiki
+  links, math, and HTML tags.
+- Add and maintain Obsidian-specific smoke/showcase notes copied by the vault
+  installer.
+
 ## 0.3.0
 
 - Track `markdown-it-inline-annotation@0.3.0`.
