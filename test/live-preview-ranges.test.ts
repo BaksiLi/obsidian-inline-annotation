@@ -5,6 +5,7 @@ import {
   mergeSourceRanges,
 } from "../src/live-preview-host-syntax";
 import { planInlineAnnotationLivePreviewDecorations } from "../src/live-preview-decoration-plan";
+import { planInlineAnnotationLivePreviewLine } from "../src/live-preview-line";
 import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-ranges";
 
 {
@@ -128,6 +129,18 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   assert.ok(!sources.includes("[code]^^(ann)"));
   assert.ok(!sources.includes("[math]^^(ann)"));
   assert.ok(!sources.includes("[term]^^(ann)"));
+}
+
+{
+  const plans = planInlineAnnotationLivePreviewLine({
+    text: "`[code]^^(ann)` [對象]^^(Gegenstand)^_(Object)：tail",
+    baseOffset: 100,
+  });
+
+  assert.deepEqual(plans.map((plan) => plan.type), ["replace", "reset-emphasis"]);
+  assert.equal(plans[0].from, 116);
+  assert.ok(plans[0].to > plans[0].from);
+  assert.equal(plans[1].to, 100 + "`[code]^^(ann)` [對象]^^(Gegenstand)^_(Object)：tail".length);
 }
 
 console.log("Obsidian Live Preview range tests passed");

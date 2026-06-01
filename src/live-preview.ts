@@ -5,8 +5,7 @@ import {
   collectFallbackHostMarkdownRanges,
   type SourceRange,
 } from "./live-preview-host-syntax";
-import { planInlineAnnotationLivePreviewDecorations } from "./live-preview-decoration-plan";
-import { findInlineAnnotationLivePreviewRanges } from "./live-preview-ranges";
+import { planInlineAnnotationLivePreviewLine } from "./live-preview-line";
 
 class InlineAnnotationWidget extends WidgetType {
   constructor(private readonly html: string) {
@@ -42,18 +41,26 @@ function buildDecorations(view: EditorView): DecorationSet {
 
   const decorations: Range<Decoration>[] = [];
   const selections = view.state.selection.ranges.map((range) => ({ from: range.from, to: range.to }));
-  const seen = new Set<number>();
+  const seenLines = new Set<number>();
 
   for (const visibleRange of view.visibleRanges) {
-    const from = view.state.doc.lineAt(visibleRange.from).from;
-    const to = view.state.doc.lineAt(visibleRange.to).to;
-    const text = view.state.doc.sliceString(from, to);
-    const hostSkipRanges = collectHostSyntaxRangesForLine(view, text, from, to);
-    const ranges = findInlineAnnotationLivePreviewRanges(text, selections, undefined, from, hostSkipRanges);
-    for (const range of ranges) {
-      if (seen.has(range.from)) continue;
-      seen.add(range.from);
-      for (const plan of planInlineAnnotationLivePreviewDecorations([range], to)) {
+    const firstLine = view.state.doc.lineAt(visibleRange.from);
+    const lastLine = view.state.doc.lineAt(visibleRange.to);
+
+    for (let lineNumber = firstLine.number; lineNumber <= lastLine.number; lineNumber++) {
+      const line = view.state.doc.line(lineNumber);
+      if (seenLines.has(line.from)) continue;
+      seenLines.add(line.from);
+
+      const text = view.state.doc.sliceString(line.from, line.to);
+      const hostSkipRanges = collectHostSyntaxRangesForLine(view, text, line.from, line.to);
+      for (const plan of planInlineAnnotationLivePreviewLine({
+        text,
+        selections,
+        baseOffset: line.from,
+        lineEnd: line.to,
+        hostSkipRanges,
+      })) {
         if (plan.type === "replace") {
           decorations.push(
             Decoration.replace({
