@@ -16,6 +16,7 @@ assert.ok(!main.includes("require(\"markdown-it-inline-annotation"), "core depen
 assert.ok(main.includes("require(\"@codemirror/view\")"), "CodeMirror view should stay external");
 assert.ok(buildConfig.includes("\"@codemirror/state\""), "CodeMirror state should stay external if used");
 assert.ok(buildConfig.includes("\"@codemirror/view\""), "CodeMirror view should stay external");
+assert.ok(buildConfig.includes("\"@codemirror/language\""), "CodeMirror language should stay external");
 assert.ok(!main.includes("previewScripts"), "Obsidian adapter must not inject preview scripts");
 
 console.log("Obsidian package checks passed");

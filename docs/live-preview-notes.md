@@ -20,9 +20,10 @@ source document, selection, and incremental viewport rendering.
   range provider is a fallback Markdown scanner; it is intentionally shaped so a
   CodeMirror syntax-tree provider can replace it.
 - The ViewPlugin now asks a `LivePreviewHostRangeProvider` for host syntax
-  ranges before invoking the annotation scanner. The planned syntax-tree
-  integration should replace the provider, not the model scanner or decoration
-  planner.
+  ranges before invoking the annotation scanner. Inline Annotation source is
+  scanned first, and host ranges only suppress models that are fully contained
+  inside host-owned Markdown. This lets the syntax-tree provider contribute
+  context without treating an annotation's own `[base]` as a host link.
 - Replacement/reset decisions are planned as pure data before they become
   CodeMirror `Decoration` objects, so editor behavior can gain tests without
   depending on Obsidian UI automation.
@@ -41,11 +42,9 @@ parentheses, or annotation text while leaving the base editable.
 - The scanner uses the core annotation model. The first widget renderer still
   renders that model back to HTML, but the range data now comes from semantic
   slots rather than reparsing generated markup.
-- Source-mode/editor syntax awareness is still shallow. Live Preview accepts
-  host skip ranges and currently fills them with a line-level fallback scanner
-  for obvious host syntax. Reliable handling of inline code, Markdown links,
-  wiki links, math, HTML, and fenced code should come from CodeMirror
-  syntax-tree data rather than more hand-written Markdown scanning.
+- Source-mode/editor syntax awareness uses a CodeMirror syntax-tree path with
+  the fallback scanner merged in. The tree matcher is still conservative and
+  should be checked in real Obsidian notes before narrowing fallback behavior.
 - The emphasis reset is a targeted prototype shield. It can also suppress
   intentional Markdown emphasis later on the same line; a syntax tree-aware
   implementation should replace it.

@@ -42,18 +42,25 @@ function mayLeakMarkdownEmphasis(source: string): boolean {
   return source.includes("^_(") || source.includes("*");
 }
 
+function isContainedByHostRange(model: InlineAnnotationModel, hostSkipRanges: readonly SourceRange[]): boolean {
+  return hostSkipRanges.some((range) => range.from <= model.start && range.to >= model.end);
+}
+
 function collectAnnotationRanges(
   text: string,
   segmentStart: number,
   segmentEnd: number,
   selections: readonly TextSelectionRange[],
   options: InlineAnnotationOptions,
-  baseOffset: number
+  baseOffset: number,
+  hostSkipRanges: readonly SourceRange[]
 ): InlineAnnotationLivePreviewRange[] {
   const ranges: InlineAnnotationLivePreviewRange[] = [];
   const models = findInlineAnnotationModels(text, segmentStart, segmentEnd, options);
 
   for (const model of models) {
+    if (isContainedByHostRange(model, hostSkipRanges)) continue;
+
     const from = baseOffset + model.start;
     const to = baseOffset + model.end;
 
@@ -79,16 +86,6 @@ export function findInlineAnnotationLivePreviewRanges(
   baseOffset = 0,
   hostSkipRanges: readonly SourceRange[] = collectFallbackHostMarkdownRanges(text)
 ): InlineAnnotationLivePreviewRange[] {
-  const ranges: InlineAnnotationLivePreviewRange[] = [];
   const skipRanges = mergeSourceRanges(hostSkipRanges);
-  let segmentStart = 0;
-
-  for (const skipRange of skipRanges) {
-    ranges.push(...collectAnnotationRanges(text, segmentStart, skipRange.from, selections, options, baseOffset));
-    segmentStart = skipRange.to;
-  }
-
-  ranges.push(...collectAnnotationRanges(text, segmentStart, text.length, selections, options, baseOffset));
-
-  return ranges;
+  return collectAnnotationRanges(text, 0, text.length, selections, options, baseOffset, skipRanges);
 }

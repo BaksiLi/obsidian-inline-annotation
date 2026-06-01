@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.5
+
+- Add a Live Preview host range provider backed by Obsidian's CodeMirror syntax
+  tree when `@codemirror/language` is available.
+- Filter Live Preview annotations core-first: scan Inline Annotation source
+  models first, then use host ranges only to suppress annotations fully
+  contained inside host-owned Markdown. Partial host overlap, such as a syntax
+  tree seeing `[base]` inside `[base]^^(...)`, no longer suppresses the
+  annotation.
+- Merge fallback Markdown ranges with syntax-tree ranges as a safety net for
+  runtime differences and Obsidian-specific syntax.
+- Keep `@codemirror/language` external so the plugin uses Obsidian's editor
+  runtime instead of bundling another CodeMirror package.
+
 ## 0.3.2
 
 - Track `markdown-it-inline-annotation@0.3.1`.
