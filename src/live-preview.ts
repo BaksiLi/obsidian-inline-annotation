@@ -1,10 +1,7 @@
 import type { Extension, Range } from "@codemirror/state";
 import { Decoration, type DecorationSet, EditorView, ViewPlugin, type ViewUpdate, WidgetType } from "@codemirror/view";
 import { editorLivePreviewField } from "obsidian";
-import {
-  collectFallbackHostMarkdownRanges,
-  type SourceRange,
-} from "./live-preview-host-syntax";
+import { collectLivePreviewHostRanges } from "./live-preview-host-ranges";
 import { planInlineAnnotationLivePreviewLine } from "./live-preview-line";
 
 class InlineAnnotationWidget extends WidgetType {
@@ -32,10 +29,6 @@ function livePreviewEnabled(view: EditorView): boolean {
   return view.state.field(editorLivePreviewField, false) === true;
 }
 
-function collectHostSyntaxRangesForLine(_view: EditorView, text: string, _lineFrom: number, _lineTo: number): SourceRange[] {
-  return collectFallbackHostMarkdownRanges(text);
-}
-
 function buildDecorations(view: EditorView): DecorationSet {
   if (!livePreviewEnabled(view)) return Decoration.none;
 
@@ -53,7 +46,12 @@ function buildDecorations(view: EditorView): DecorationSet {
       seenLines.add(line.from);
 
       const text = view.state.doc.sliceString(line.from, line.to);
-      const hostSkipRanges = collectHostSyntaxRangesForLine(view, text, line.from, line.to);
+      const hostSkipRanges = collectLivePreviewHostRanges({
+        view,
+        text,
+        lineFrom: line.from,
+        lineTo: line.to,
+      });
       for (const plan of planInlineAnnotationLivePreviewLine({
         text,
         selections,

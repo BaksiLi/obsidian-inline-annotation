@@ -4,6 +4,7 @@ import {
   collectFallbackHostMarkdownRanges,
   mergeSourceRanges,
 } from "../src/live-preview-host-syntax";
+import { collectLivePreviewHostRanges } from "../src/live-preview-host-ranges";
 import { planInlineAnnotationLivePreviewDecorations } from "../src/live-preview-decoration-plan";
 import { planInlineAnnotationLivePreviewLine } from "../src/live-preview-line";
 import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-ranges";
@@ -141,6 +142,29 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   assert.equal(plans[0].from, 116);
   assert.ok(plans[0].to > plans[0].from);
   assert.equal(plans[1].to, 100 + "`[code]^^(ann)` [對象]^^(Gegenstand)^_(Object)：tail".length);
+}
+
+{
+  const fallbackRanges = collectLivePreviewHostRanges({
+    view: {} as never,
+    text: "`[code]^^(ann)` [text]^^(ann)",
+    lineFrom: 0,
+    lineTo: 29,
+  });
+
+  assert.deepEqual(fallbackRanges, [{ from: 0, to: 15 }]);
+
+  const customRanges = collectLivePreviewHostRanges(
+    {
+      view: {} as never,
+      text: "[skip]^^(x) [keep]^^(y)",
+      lineFrom: 10,
+      lineTo: 33,
+    },
+    ({ text }) => [{ from: 0, to: text.indexOf(" ") }]
+  );
+
+  assert.deepEqual(customRanges, [{ from: 0, to: 11 }]);
 }
 
 console.log("Obsidian Live Preview range tests passed");

@@ -19,9 +19,10 @@ source document, selection, and incremental viewport rendering.
 - Separates annotation scanning from host-owned source ranges. The current host
   range provider is a fallback Markdown scanner; it is intentionally shaped so a
   CodeMirror syntax-tree provider can replace it.
-- The ViewPlugin now asks for host syntax ranges before invoking the annotation
-  scanner. The planned syntax-tree integration should replace
-  `collectHostSyntaxRangesForLine`, not the model scanner.
+- The ViewPlugin now asks a `LivePreviewHostRangeProvider` for host syntax
+  ranges before invoking the annotation scanner. The planned syntax-tree
+  integration should replace the provider, not the model scanner or decoration
+  planner.
 - Replacement/reset decisions are planned as pure data before they become
   CodeMirror `Decoration` objects, so editor behavior can gain tests without
   depending on Obsidian UI automation.
