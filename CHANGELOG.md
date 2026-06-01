@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.2
+
+- Track `markdown-it-inline-annotation@0.3.1`.
+- Build Live Preview ranges from the shared multi-model scanner instead of a
+  local scan loop, keeping Obsidian's source-range behavior aligned with core.
+- Keep Live Preview planning line-scoped so Markdown-emphasis reset decorations
+  cannot spill across visible-range boundaries.
+
 ## 0.3.1
 
 - Prepare the Live Preview scanner for syntax-tree host ranges by separating

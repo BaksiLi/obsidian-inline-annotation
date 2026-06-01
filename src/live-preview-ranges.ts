@@ -1,5 +1,5 @@
 import {
-  findInlineAnnotationModel,
+  findInlineAnnotationModels,
   renderInlineAnnotationModelToHtml,
   type InlineAnnotationModel,
   type InlineAnnotationOptions,
@@ -42,46 +42,18 @@ function mayLeakMarkdownEmphasis(source: string): boolean {
   return source.includes("^_(") || source.includes("*");
 }
 
-export function findInlineAnnotationLivePreviewRanges(
-  text: string,
-  selections: readonly TextSelectionRange[] = [],
-  options: InlineAnnotationOptions = OBSIDIAN_RENDER_OPTIONS,
-  baseOffset = 0,
-  hostSkipRanges: readonly SourceRange[] = collectFallbackHostMarkdownRanges(text)
-): InlineAnnotationLivePreviewRange[] {
-  const ranges: InlineAnnotationLivePreviewRange[] = [];
-  const skipRanges = mergeSourceRanges(hostSkipRanges);
-  let segmentStart = 0;
-
-  for (const skipRange of skipRanges) {
-    collectAnnotationRanges(text, segmentStart, skipRange.from, selections, options, baseOffset, ranges);
-    segmentStart = skipRange.to;
-  }
-
-  collectAnnotationRanges(text, segmentStart, text.length, selections, options, baseOffset, ranges);
-
-  return ranges;
-}
-
 function collectAnnotationRanges(
   text: string,
   segmentStart: number,
   segmentEnd: number,
   selections: readonly TextSelectionRange[],
   options: InlineAnnotationOptions,
-  baseOffset: number,
-  ranges: InlineAnnotationLivePreviewRange[]
-): void {
-  let pos = segmentStart;
+  baseOffset: number
+): InlineAnnotationLivePreviewRange[] {
+  const ranges: InlineAnnotationLivePreviewRange[] = [];
+  const models = findInlineAnnotationModels(text, segmentStart, segmentEnd, options);
 
-  while (pos < segmentEnd) {
-    const model = findInlineAnnotationModel(text, pos, segmentEnd, options);
-    if (!model) break;
-    if (model.end <= pos) {
-      pos++;
-      continue;
-    }
-
+  for (const model of models) {
     const from = baseOffset + model.start;
     const to = baseOffset + model.end;
 
@@ -95,7 +67,28 @@ function collectAnnotationRanges(
         source: model.source,
       });
     }
-
-    pos = model.end;
   }
+
+  return ranges;
+}
+
+export function findInlineAnnotationLivePreviewRanges(
+  text: string,
+  selections: readonly TextSelectionRange[] = [],
+  options: InlineAnnotationOptions = OBSIDIAN_RENDER_OPTIONS,
+  baseOffset = 0,
+  hostSkipRanges: readonly SourceRange[] = collectFallbackHostMarkdownRanges(text)
+): InlineAnnotationLivePreviewRange[] {
+  const ranges: InlineAnnotationLivePreviewRange[] = [];
+  const skipRanges = mergeSourceRanges(hostSkipRanges);
+  let segmentStart = 0;
+
+  for (const skipRange of skipRanges) {
+    ranges.push(...collectAnnotationRanges(text, segmentStart, skipRange.from, selections, options, baseOffset));
+    segmentStart = skipRange.to;
+  }
+
+  ranges.push(...collectAnnotationRanges(text, segmentStart, text.length, selections, options, baseOffset));
+
+  return ranges;
 }
