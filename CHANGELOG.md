@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.6
+
+- Track `markdown-it-inline-annotation@0.3.2`.
+- Preserve independent overline/underline styles for chained line marks, such as
+  `[漢字]^^(.-)^_(.~)`, in Reading view and Live Preview.
+
 ## 0.3.5
 
 - Add a Live Preview host range provider backed by Obsidian's CodeMirror syntax

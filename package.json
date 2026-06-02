@@ -1,6 +1,6 @@
 {
   "name": "obsidian-inline-annotation",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "description": "Render Inline Annotation syntax in Obsidian reading view.",
   "main": "main.js",
@@ -20,7 +20,7 @@
     "update:core": "npm install markdown-it-inline-annotation@latest"
   },
   "dependencies": {
-    "markdown-it-inline-annotation": "^0.3.1"
+    "markdown-it-inline-annotation": "^0.3.2"
   },
   "devDependencies": {
     "@codemirror/state": "^6.5.0",
