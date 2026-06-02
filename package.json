@@ -1,6 +1,6 @@
 {
   "name": "obsidian-inline-annotation",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "private": true,
   "description": "Render Inline Annotation syntax in Obsidian reading view.",
   "main": "main.js",

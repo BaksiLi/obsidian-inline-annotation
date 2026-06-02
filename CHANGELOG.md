@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.7
+
+- Repair Reading view annotations that Obsidian splits across inline Markdown
+  elements inside the annotation slot, such as `[term]^^(**plain text**)`.
+  Annotation slot contents remain plain text by spec; the adapter now avoids
+  dropping the whole annotation when the host has already parsed the Markdown.
+
 ## 0.3.6
 
 - Track `markdown-it-inline-annotation@0.3.2`.

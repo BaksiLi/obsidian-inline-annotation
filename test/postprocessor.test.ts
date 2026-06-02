@@ -153,10 +153,24 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
   root.querySelector("span")!.textContent = "[term]^^(";
 
   const stats = renderInlineAnnotationsInElement(root);
+  const html = root.innerHTML;
 
-  assert.equal(stats.replacements, 0);
-  assert.ok(root.innerHTML.includes("[term]^^("));
-  assert.ok(root.innerHTML.includes("<strong>bold gloss</strong>"));
+  assert.equal(stats.replacements, 1);
+  assert.ok(html.includes("<ruby"));
+  assert.ok(html.includes("<rt>bold gloss</rt>"));
+  assert.ok(!html.includes("<strong>bold gloss</strong>"));
+}
+
+{
+  const root = createRoot("<p><span></span><strong>unsaturated entity</strong><span>)</span></p>");
+  root.querySelector("span")!.textContent = "[不飽和實體]^^(";
+
+  const stats = renderInlineAnnotationsInElement(root);
+  const html = root.innerHTML;
+
+  assert.equal(stats.replacements, 1);
+  assert.ok(html.includes("不飽和實體"));
+  assert.ok(html.includes("<rt>unsaturated entity</rt>"));
 }
 
 console.log(
