@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.8
+
+- Render generated Inline Annotation DOM with explicit DOM APIs instead of
+  assigning HTML strings, matching Obsidian Community review security guidance.
+- Replace the Live Preview source-level `require()` with a static CodeMirror
+  language import while preserving the fallback range scanner.
+- Add a tag-based GitHub release workflow with artifact attestations for the
+  Obsidian release assets.
+- Add package checks that prevent production source from reintroducing direct
+  HTML assignment or CommonJS-style imports.
+
 ## 0.3.7
 
 - Repair Reading view annotations that Obsidian splits across inline Markdown

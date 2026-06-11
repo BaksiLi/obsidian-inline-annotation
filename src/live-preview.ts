@@ -1,22 +1,25 @@
 import type { Extension, Range } from "@codemirror/state";
 import { Decoration, type DecorationSet, EditorView, ViewPlugin, type ViewUpdate, WidgetType } from "@codemirror/view";
+import type { InlineAnnotationModel } from "markdown-it-inline-annotation/core";
 import { editorLivePreviewField } from "obsidian";
 import { collectLivePreviewHostRanges } from "./live-preview-host-ranges";
 import { planInlineAnnotationLivePreviewLine } from "./live-preview-line";
+import { renderInlineAnnotationModelToFragment } from "./render-dom";
+import { OBSIDIAN_RENDER_OPTIONS } from "./render-options";
 
 class InlineAnnotationWidget extends WidgetType {
-  constructor(private readonly html: string) {
+  constructor(private readonly model: InlineAnnotationModel) {
     super();
   }
 
   eq(other: InlineAnnotationWidget): boolean {
-    return this.html === other.html;
+    return this.model.source === other.model.source;
   }
 
-  toDOM(): HTMLElement {
-    const element = document.createElement("span");
+  toDOM(view: EditorView): HTMLElement {
+    const element = view.dom.ownerDocument.createElement("span");
     element.className = "ia-live-preview-widget";
-    element.innerHTML = this.html;
+    element.append(renderInlineAnnotationModelToFragment(this.model, element.ownerDocument, OBSIDIAN_RENDER_OPTIONS));
     return element;
   }
 
@@ -62,7 +65,7 @@ function buildDecorations(view: EditorView): DecorationSet {
         if (plan.type === "replace") {
           decorations.push(
             Decoration.replace({
-              widget: new InlineAnnotationWidget(plan.html),
+              widget: new InlineAnnotationWidget(plan.model),
               inclusive: false,
             }).range(plan.from, plan.to)
           );

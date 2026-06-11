@@ -1,3 +1,4 @@
+import { syntaxTree } from "@codemirror/language";
 import type { EditorView } from "@codemirror/view";
 import {
   collectFallbackHostMarkdownRanges,
@@ -18,10 +19,6 @@ export const fallbackLivePreviewHostRangeProvider: LivePreviewHostRangeProvider 
   return collectFallbackHostMarkdownRanges(context.text);
 };
 
-interface SyntaxTreeModule {
-  syntaxTree(state: unknown): SyntaxTreeLike;
-}
-
 interface SyntaxTreeLike {
   cursor?: () => SyntaxTreeCursorLike;
   iterate?: (spec: {
@@ -41,14 +38,6 @@ interface SyntaxTreeNodeLike {
   name: string;
   from: number;
   to: number;
-}
-
-function loadSyntaxTreeModule(): SyntaxTreeModule | null {
-  try {
-    return require("@codemirror/language") as SyntaxTreeModule;
-  } catch {
-    return null;
-  }
 }
 
 function isHostOwnedMarkdownNode(name: string): boolean {
@@ -115,12 +104,13 @@ export function collectSyntaxTreeHostMarkdownRanges(tree: SyntaxTreeLike, lineFr
 
 export const syntaxTreeLivePreviewHostRangeProvider: LivePreviewHostRangeProvider = (context) => {
   const fallbackRanges = fallbackLivePreviewHostRangeProvider(context);
-  const syntaxTreeModule = loadSyntaxTreeModule();
-  if (!syntaxTreeModule) return fallbackRanges;
-
-  const tree = syntaxTreeModule.syntaxTree(context.view.state);
-  const syntaxTreeRanges = collectSyntaxTreeHostMarkdownRanges(tree, context.lineFrom, context.lineTo);
-  return mergeSourceRanges([...fallbackRanges, ...syntaxTreeRanges]);
+  try {
+    const tree = syntaxTree(context.view.state);
+    const syntaxTreeRanges = collectSyntaxTreeHostMarkdownRanges(tree, context.lineFrom, context.lineTo);
+    return mergeSourceRanges([...fallbackRanges, ...syntaxTreeRanges]);
+  } catch {
+    return fallbackRanges;
+  }
 };
 
 export function collectLivePreviewHostRanges(

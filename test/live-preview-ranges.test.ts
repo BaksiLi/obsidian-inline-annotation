@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { Window } from "happy-dom";
 import {
   collectFallbackHostMarkdownRanges,
   mergeSourceRanges,
@@ -11,6 +12,15 @@ import {
 import { planInlineAnnotationLivePreviewDecorations } from "../src/live-preview-decoration-plan";
 import { planInlineAnnotationLivePreviewLine } from "../src/live-preview-line";
 import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-ranges";
+import { renderInlineAnnotationModelToFragment } from "../src/render-dom";
+import { OBSIDIAN_RENDER_OPTIONS } from "../src/render-options";
+
+function renderRangeHtml(range: ReturnType<typeof findInlineAnnotationLivePreviewRanges>[number]): string {
+  const window = new Window();
+  const root = window.document.createElement("div");
+  root.append(renderInlineAnnotationModelToFragment(range.model, window.document, OBSIDIAN_RENDER_OPTIONS));
+  return root.innerHTML;
+}
 
 {
   const ranges = findInlineAnnotationLivePreviewRanges("a [漢字]^^(かんじ) b [base]^_(.-)");
@@ -21,10 +31,10 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
   assert.equal(ranges[0].model.base.raw, "漢字");
   assert.equal(ranges[0].model.slots[0].position, "over");
   assert.equal(ranges[0].resetMarkdownEmphasisAfter, false);
-  assert.ok(ranges[0].html.includes("<rt>かんじ</rt>"));
+  assert.ok(renderRangeHtml(ranges[0]).includes("<rt>かんじ</rt>"));
   assert.equal(ranges[1].source, "[base]^_(.-)");
   assert.equal(ranges[1].resetMarkdownEmphasisAfter, true);
-  assert.ok(ranges[1].html.includes("ia-underline"));
+  assert.ok(renderRangeHtml(ranges[1]).includes("ia-underline"));
 }
 
 {
@@ -40,16 +50,16 @@ import { findInlineAnnotationLivePreviewRanges } from "../src/live-preview-range
 
   assert.equal(ranges.length, 1);
   assert.deepEqual(ranges[0].model.overflow.map((range) => range.raw), ["|z"]);
-  assert.ok(ranges[0].html.includes("|z"));
+  assert.ok(renderRangeHtml(ranges[0]).includes("|z"));
 }
 
 {
   const ranges = findInlineAnnotationLivePreviewRanges("[真值]^^(Truth Value) [取り返す]^^(と り かえ す)");
 
   assert.equal(ranges.length, 2);
-  assert.equal(ranges[0].html.split("<rt>").length - 1, 1);
-  assert.ok(ranges[0].html.includes("<rt>Truth Value</rt>"));
-  assert.equal(ranges[1].html.split("<ruby").length - 1, 4);
+  assert.equal(renderRangeHtml(ranges[0]).split("<rt>").length - 1, 1);
+  assert.ok(renderRangeHtml(ranges[0]).includes("<rt>Truth Value</rt>"));
+  assert.equal(renderRangeHtml(ranges[1]).split("<ruby").length - 1, 4);
 }
 
 {

@@ -1,10 +1,18 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 
 const manifest = JSON.parse(readFileSync(new URL("../manifest.json", import.meta.url), "utf8"));
 const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 const main = readFileSync(new URL("../main.js", import.meta.url), "utf8");
 const buildConfig = readFileSync(new URL("../esbuild.config.mjs", import.meta.url), "utf8");
+
+function sourceFiles(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const url = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, directory);
+    if (entry.isDirectory()) return sourceFiles(url);
+    return entry.name.endsWith(".ts") ? [url] : [];
+  });
+}
 
 assert.equal(manifest.id, "inline-annotation");
 assert.equal(manifest.version, pkg.version);
@@ -18,5 +26,11 @@ assert.ok(buildConfig.includes("\"@codemirror/state\""), "CodeMirror state shoul
 assert.ok(buildConfig.includes("\"@codemirror/view\""), "CodeMirror view should stay external");
 assert.ok(buildConfig.includes("\"@codemirror/language\""), "CodeMirror language should stay external");
 assert.ok(!main.includes("previewScripts"), "Obsidian adapter must not inject preview scripts");
+
+for (const file of sourceFiles(new URL("../src/", import.meta.url))) {
+  const source = readFileSync(file, "utf8");
+  assert.ok(!/\b(?:innerHTML|outerHTML|insertAdjacentHTML)\b/.test(source), `${file.pathname} must build DOM safely`);
+  assert.ok(!/\brequire\s*\(/.test(source), `${file.pathname} must use ESM imports`);
+}
 
 console.log("Obsidian package checks passed");

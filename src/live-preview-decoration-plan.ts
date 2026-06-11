@@ -1,3 +1,4 @@
+import type { InlineAnnotationModel } from "markdown-it-inline-annotation/core";
 import type { InlineAnnotationLivePreviewRange } from "./live-preview-ranges";
 
 export type InlineAnnotationLivePreviewDecorationPlan =
@@ -5,7 +6,7 @@ export type InlineAnnotationLivePreviewDecorationPlan =
       type: "replace";
       from: number;
       to: number;
-      html: string;
+      model: InlineAnnotationModel;
     }
   | {
       type: "reset-emphasis";
@@ -24,7 +25,7 @@ export function planInlineAnnotationLivePreviewDecorations(
       type: "replace",
       from: range.from,
       to: range.to,
-      html: range.html,
+      model: range.model,
     });
     if (range.resetMarkdownEmphasisAfter && range.to < lineEnd) {
       plans.push({

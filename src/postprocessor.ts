@@ -1,10 +1,9 @@
 import {
   findInlineAnnotation,
   findInlineAnnotationModels,
-  renderInlineAnnotationModelToHtml,
-  renderInlineAnnotationsToHtml,
   type InlineAnnotationModel,
 } from "markdown-it-inline-annotation/core";
+import { renderInlineAnnotationModelToFragment, renderInlineAnnotationsToFragment } from "./render-dom";
 import { OBSIDIAN_RENDER_OPTIONS } from "./render-options";
 
 const SKIP_TAGS = new Set(["A", "CODE", "PRE", "RUBY", "SCRIPT", "STYLE", "TEXTAREA"]);
@@ -50,10 +49,7 @@ function shouldSkipElement(element: Element, root: Element): boolean {
 }
 
 function replaceTextNode(node: Text): void {
-  const html = renderInlineAnnotationsToHtml(node.nodeValue ?? "", OBSIDIAN_RENDER_OPTIONS);
-  const template = node.ownerDocument.createElement("template");
-  template.innerHTML = html;
-  node.replaceWith(template.content);
+  node.replaceWith(renderInlineAnnotationsToFragment(node.nodeValue ?? "", node.ownerDocument, OBSIDIAN_RENDER_OPTIONS));
 }
 
 interface TextRun {
@@ -144,13 +140,9 @@ function replaceTextRange(container: Element, match: { runs: TextRun[]; model: I
   const end = findRunAt(match.runs, match.model.end, "end");
   if (!start || !end) return;
 
-  const html = renderInlineAnnotationModelToHtml(match.model, OBSIDIAN_RENDER_OPTIONS);
-  const template = container.ownerDocument.createElement("template");
-  template.innerHTML = html;
-
   const range = container.ownerDocument.createRange();
   range.setStart(start.run.node, start.offset);
   range.setEnd(end.run.node, end.offset);
   range.deleteContents();
-  range.insertNode(template.content);
+  range.insertNode(renderInlineAnnotationModelToFragment(match.model, container.ownerDocument, OBSIDIAN_RENDER_OPTIONS));
 }

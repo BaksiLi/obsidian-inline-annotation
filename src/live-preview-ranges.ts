@@ -1,6 +1,5 @@
 import {
   findInlineAnnotationModels,
-  renderInlineAnnotationModelToHtml,
   type InlineAnnotationModel,
   type InlineAnnotationOptions,
 } from "markdown-it-inline-annotation/core";
@@ -19,7 +18,6 @@ export interface TextSelectionRange {
 export interface InlineAnnotationLivePreviewRange {
   from: number;
   to: number;
-  html: string;
   model: InlineAnnotationModel;
   resetMarkdownEmphasisAfter: boolean;
   source: string;
@@ -68,7 +66,6 @@ function collectAnnotationRanges(
       ranges.push({
         from,
         to,
-        html: renderInlineAnnotationModelToHtml(model, options),
         model,
         resetMarkdownEmphasisAfter: mayLeakMarkdownEmphasis(model.source),
         source: model.source,
