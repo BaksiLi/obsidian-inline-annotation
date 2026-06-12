@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.9
+
+- Rename the public plugin title to **Inline Ruby Annotation** so the Obsidian
+  listing is clearer and less easily confused with popup/comment annotation
+  plugins.
+- Put the source syntax, `[base]^^(ruby)` and `[base]^_(under)`, into the
+  manifest description and README lead.
+
 ## 0.3.8
 
 - Render generated Inline Annotation DOM with explicit DOM APIs instead of

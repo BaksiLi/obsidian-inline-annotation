@@ -1,9 +1,9 @@
 {
   "id": "inline-annotation",
-  "name": "Inline Annotation",
-  "version": "0.3.8",
+  "name": "Inline Ruby Annotation",
+  "version": "0.3.9",
   "minAppVersion": "1.5.0",
-  "description": "Render Inline Annotation ruby, bouten, underline, and two-slot annotations in reading view.",
+  "description": "Render [base]^^(ruby) and [base]^_(under) as ruby, furigana, bouten, underline, and two-slot glosses.",
   "author": "Baksi Li",
   "isDesktopOnly": false
 }

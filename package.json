@@ -1,14 +1,14 @@
 {
   "name": "obsidian-inline-annotation",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "private": true,
-  "description": "Render Inline Annotation syntax in Obsidian reading view.",
+  "description": "Render [base]^^(ruby) Inline Annotation syntax in Obsidian Reading view and Live Preview.",
   "main": "main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BaksiLi/obsidian-inline-annotation.git"
   },
-  "homepage": "https://github.com/BaksiLi/obsidian-inline-annotation#readme",
+  "homepage": "https://community.obsidian.md/plugins/inline-annotation",
   "bugs": {
     "url": "https://github.com/BaksiLi/obsidian-inline-annotation/issues"
   },

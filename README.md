@@ -1,10 +1,22 @@
-# Inline Annotation for Obsidian
+# Inline Ruby Annotation for Obsidian
 
-Obsidian adapter for Inline Annotation.
+Render `[base]^^(ruby)` and `[base]^_(under)` as inline ruby/furigana,
+interlinear glosses, bouten emphasis dots, overlines, and underlines in
+Obsidian.
 
 The current adapter registers a Markdown postprocessor for Reading view and a
 CodeMirror extension for Live Preview. Both paths render Inline Annotation v2
 syntax with `markdown-it-inline-annotation/core`.
+
+This plugin is part of the **Inline Annotation** ecosystem:
+
+- **Spec and core:** [`markdown-it-inline-annotation`](https://github.com/BaksiLi/markdown-it-inline-annotation)
+- **Obsidian Community:** [Inline Ruby Annotation](https://community.obsidian.md/plugins/inline-annotation)
+- **VS Code Marketplace:** [Inline Ruby Annotation](https://marketplace.visualstudio.com/items?itemName=baksili.vscode-inline-annotation)
+- **Logseq reference plugin:** [`logseq-furigana-ruby`](https://github.com/BaksiLi/logseq-furigana-ruby)
+
+It is not a popup/comment annotation tool. The annotation is visible typography
+encoded directly in Markdown source.
 
 ## Scope
 
