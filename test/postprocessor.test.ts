@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { Window } from "happy-dom";
 import fixtureCorpus from "markdown-it-inline-annotation/fixtures/html-render.json";
+import segmentBoundaryCorpus from "./segment-boundaries.json";
 import { renderInlineAnnotationsInElement } from "../src/postprocessor";
 
 interface FixtureCorpus {
@@ -12,6 +13,17 @@ interface FixtureCorpus {
     contains?: string[];
     notContains?: string[];
     counts?: Array<{ pattern: string; count: number }>;
+  }>;
+}
+
+interface SegmentBoundaryCorpus {
+  cases: Array<{
+    id: string;
+    expectation: "must-render" | "may-render" | "must-preserve";
+    runs: Array<{
+      kind: "plain" | "transparent" | "strong" | "emphasis" | "mark" | "link" | "code";
+      text: string;
+    }>;
   }>;
 }
 
@@ -41,6 +53,32 @@ function createTextRoot(input: string): HTMLElement {
   const paragraph = root.querySelector("p");
   assert.ok(paragraph);
   paragraph.textContent = input;
+  return root;
+}
+
+function createBoundaryRoot(fixture: SegmentBoundaryCorpus["cases"][number]): HTMLElement {
+  const root = createRoot("<p></p>");
+  const paragraph = root.querySelector("p");
+  assert.ok(paragraph);
+
+  for (const run of fixture.runs) {
+    if (run.kind === "plain") {
+      paragraph.append(root.ownerDocument.createTextNode(run.text));
+      continue;
+    }
+    const tags = {
+      transparent: "span",
+      strong: "strong",
+      emphasis: "em",
+      mark: "mark",
+      link: "a",
+      code: "code",
+    } as const;
+    const element = root.ownerDocument.createElement(tags[run.kind]);
+    if (run.kind === "link") element.setAttribute("href", "https://example.com");
+    element.textContent = run.text;
+    paragraph.append(element);
+  }
   return root;
 }
 
@@ -148,29 +186,28 @@ for (const fixture of (fixtureCorpus as FixtureCorpus).cases) {
   assert.equal(root.innerHTML.split("<ruby").length - 1, 1);
 }
 
-{
-  const root = createRoot("<p><span></span><strong>bold gloss</strong><span>)</span></p>");
-  root.querySelector("span")!.textContent = "[term]^^(";
-
-  const stats = renderInlineAnnotationsInElement(root);
+for (const fixture of (segmentBoundaryCorpus as SegmentBoundaryCorpus).cases) {
+  const root = createBoundaryRoot(fixture);
+  const source = fixture.runs.map((run) => run.text).join("");
+  renderInlineAnnotationsInElement(root);
   const html = root.innerHTML;
 
-  assert.equal(stats.replacements, 1);
-  assert.ok(html.includes("<ruby"));
-  assert.ok(html.includes("<rt>bold gloss</rt>"));
-  assert.ok(!html.includes("<strong>bold gloss</strong>"));
-}
+  if (fixture.expectation === "must-preserve") {
+    assert.ok(!html.includes("ia-ruby"), `${fixture.id} must not render across a semantic boundary`);
+    assert.equal(root.querySelector("p")?.textContent, source, `${fixture.id} source text must stay intact`);
+    const semanticTags = { strong: "strong", emphasis: "em", mark: "mark", link: "a", code: "code" } as const;
+    for (const run of fixture.runs) {
+      if (!(run.kind in semanticTags)) continue;
+      const element = root.querySelector(semanticTags[run.kind as keyof typeof semanticTags]);
+      assert.equal(element?.textContent, run.text, `${fixture.id} must preserve the ${run.kind} run`);
+    }
+  } else {
+    assert.ok(html.includes("ia-ruby"), `${fixture.id} should render under Obsidian's transparent-run policy`);
+  }
 
-{
-  const root = createRoot("<p><span></span><strong>unsaturated entity</strong><span>)</span></p>");
-  root.querySelector("span")!.textContent = "[不飽和實體]^^(";
-
-  const stats = renderInlineAnnotationsInElement(root);
-  const html = root.innerHTML;
-
-  assert.equal(stats.replacements, 1);
-  assert.ok(html.includes("不飽和實體"));
-  assert.ok(html.includes("<rt>unsaturated entity</rt>"));
+  if (fixture.id === "boundary-single-formatted-run") {
+    assert.ok(html.includes("<strong><ruby"), "a containing strong run must be preserved");
+  }
 }
 
 console.log(

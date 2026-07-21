@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "source": "markdown-it-inline-annotation/fixtures/segment-boundaries.json",
+  "cases": [
+    {
+      "id": "boundary-single-plain-run",
+      "name": "complete expression in one plain run",
+      "expectation": "must-render",
+      "runs": [{ "kind": "plain", "text": "[漢字]^^(かんじ)" }]
+    },
+    {
+      "id": "boundary-single-formatted-run",
+      "name": "complete expression contained by one formatted run",
+      "expectation": "must-render",
+      "runs": [{ "kind": "strong", "text": "[漢字]^^(かんじ)" }]
+    },
+    {
+      "id": "boundary-adjacent-plain-runs",
+      "name": "expression split across adjacent plain text runs",
+      "expectation": "may-render",
+      "runs": [
+        { "kind": "plain", "text": "[漢字]^^(" },
+        { "kind": "plain", "text": "かんじ)" }
+      ]
+    },
+    {
+      "id": "boundary-transparent-wrappers",
+      "name": "expression split across transparent wrappers",
+      "expectation": "may-render",
+      "runs": [
+        { "kind": "transparent", "text": "[漢字]^^(" },
+        { "kind": "transparent", "text": "かんじ)" }
+      ]
+    },
+    {
+      "id": "boundary-strong-crossing-slot",
+      "name": "annotation slot crosses a strong-emphasis boundary",
+      "expectation": "must-preserve",
+      "runs": [
+        { "kind": "plain", "text": "[term]^^(" },
+        { "kind": "strong", "text": "bold gloss" },
+        { "kind": "plain", "text": ")" }
+      ]
+    },
+    {
+      "id": "boundary-emphasis-crossing-base",
+      "name": "base crosses an emphasis boundary",
+      "expectation": "must-preserve",
+      "runs": [
+        { "kind": "plain", "text": "[" },
+        { "kind": "emphasis", "text": "term" },
+        { "kind": "plain", "text": "]^^(gloss)" }
+      ]
+    },
+    {
+      "id": "boundary-highlight-crossing-slot",
+      "name": "annotation slot crosses a highlight boundary",
+      "expectation": "must-preserve",
+      "runs": [
+        { "kind": "plain", "text": "[term]^^(" },
+        { "kind": "mark", "text": "highlighted gloss" },
+        { "kind": "plain", "text": ")" }
+      ]
+    },
+    {
+      "id": "boundary-link-crossing-slot",
+      "name": "annotation slot crosses a link boundary",
+      "expectation": "must-preserve",
+      "runs": [
+        { "kind": "plain", "text": "[term]^^(" },
+        { "kind": "link", "text": "linked gloss" },
+        { "kind": "plain", "text": ")" }
+      ]
+    },
+    {
+      "id": "boundary-code-crossing-slot",
+      "name": "annotation slot crosses an inline-code boundary",
+      "expectation": "must-preserve",
+      "runs": [
+        { "kind": "plain", "text": "[term]^^(" },
+        { "kind": "code", "text": "code gloss" },
+        { "kind": "plain", "text": ")" }
+      ]
+    }
+  ]
+}

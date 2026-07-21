@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.10
+
+- Preserve emphasis, highlight, link, code, and other semantic DOM boundaries
+  instead of flattening them to reconstruct a fragmented annotation.
+- Continue to render complete expressions inside one formatted run and allow
+  coalescing only across adjacent plain nodes or attribute-free spans.
+- Add the shared segment-boundary fixture corpus to Reading-view tests.
+- Track `markdown-it-inline-annotation@0.3.3`.
+
 ## 0.3.9
 
 - Rename the public plugin title to **Inline Ruby Annotation** so the Obsidian

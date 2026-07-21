@@ -56,7 +56,7 @@ interface TextRun {
   node: Text;
   start: number;
   end: number;
-  eligible: boolean;
+  coalescible: boolean;
 }
 
 function replaceFragmentedAnnotations(root: HTMLElement): number {
@@ -96,11 +96,22 @@ function findFragmentedMatch(container: Element, root: HTMLElement): { runs: Tex
   for (const model of models) {
     const touchedRuns = runs.filter((run) => run.end > model.start && run.start < model.end);
     if (touchedRuns.length <= 1) continue;
-    if (touchedRuns.some((run) => !run.eligible)) continue;
+    if (touchedRuns.some((run) => !run.coalescible)) continue;
     return { runs, model };
   }
 
   return null;
+}
+
+function isTransparentWrapper(element: Element): boolean {
+  return element.tagName === "SPAN" && element.attributes.length === 0;
+}
+
+function canCoalesceTextRun(node: Text, container: Element, root: HTMLElement): boolean {
+  for (let current = node.parentElement; current && current !== container; current = current.parentElement) {
+    if (shouldSkipElement(current, root) || !isTransparentWrapper(current)) return false;
+  }
+  return Boolean(node.parentElement && !shouldSkipElement(container, root));
 }
 
 function collectTextRuns(container: Element, root: HTMLElement): TextRun[] {
@@ -113,12 +124,11 @@ function collectTextRuns(container: Element, root: HTMLElement): TextRun[] {
   while (walker.nextNode()) {
     const node = walker.currentNode as Text;
     const text = node.nodeValue ?? "";
-    const parent = node.parentElement;
     runs.push({
       node,
       start: offset,
       end: offset + text.length,
-      eligible: Boolean(parent && !shouldSkipElement(parent, root)),
+      coalescible: canCoalesceTextRun(node, container, root),
     });
     offset += text.length;
   }
