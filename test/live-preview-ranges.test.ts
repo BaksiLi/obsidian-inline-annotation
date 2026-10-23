@@ -38,6 +38,19 @@ function renderRangeHtml(range: ReturnType<typeof findInlineAnnotationLivePrevie
 }
 
 {
+  const source = "prefix [artefact]^^((semi-)formal artefact) suffix";
+  const ranges = findInlineAnnotationLivePreviewRanges(source);
+  assert.equal(ranges.length, 1);
+  assert.equal(ranges[0].source, "[artefact]^^((semi-)formal artefact)");
+  assert.equal(ranges[0].to, source.indexOf(" suffix"));
+  assert.equal(ranges[0].model.slots[0].raw, "(semi-)formal artefact");
+  assert.ok(renderRangeHtml(ranges[0]).includes("<rt>(semi-)formal artefact</rt>"));
+
+  const cursor = source.indexOf("formal artefact");
+  assert.equal(findInlineAnnotationLivePreviewRanges(source, [{ from: cursor, to: cursor }]).length, 0);
+}
+
+{
   const source = "a [漢字]^^(かんじ) b";
   const cursorInside = source.indexOf("漢");
   const ranges = findInlineAnnotationLivePreviewRanges(source, [{ from: cursorInside, to: cursorInside }]);

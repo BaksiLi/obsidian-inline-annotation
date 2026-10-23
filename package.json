@@ -1,6 +1,6 @@
 {
   "name": "obsidian-inline-annotation",
-  "version": "0.3.10",
+  "version": "0.4.0",
   "private": true,
   "description": "Render [base]^^(ruby) Inline Annotation syntax in Obsidian Reading view and Live Preview.",
   "main": "main.js",
@@ -13,6 +13,7 @@
     "url": "https://github.com/BaksiLi/obsidian-inline-annotation/issues"
   },
   "scripts": {
+    "version": "node scripts/version.mjs && git add manifest.json versions.json",
     "build": "node esbuild.config.mjs",
     "test": "node scripts/run-tests.mjs",
     "check": "npm run build && npm test && node scripts/check-package.mjs",
@@ -20,7 +21,7 @@
     "update:core": "npm install markdown-it-inline-annotation@latest"
   },
   "dependencies": {
-    "markdown-it-inline-annotation": "^0.3.3"
+    "markdown-it-inline-annotation": "^0.4.0"
   },
   "devDependencies": {
     "@codemirror/language": "^6.11.3",

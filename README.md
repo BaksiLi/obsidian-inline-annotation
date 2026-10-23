@@ -67,6 +67,11 @@ npm install
 npm run check
 ```
 
+`npm version` synchronizes `manifest.json` and `versions.json`.
+Push the matching bare version tag, such as `0.4.0`, to test, build, and upload
+the three Obsidian release assets with attestations.
+The Release workflow can also be dispatched on an existing tag to retry it.
+
 `npm run check` builds the plugin, runs the shared rendering and segment-boundary
 fixtures, tests Live Preview source ranges, and verifies package safety rules.
 The core package is bundled into `main.js`; Obsidian and its CodeMirror packages

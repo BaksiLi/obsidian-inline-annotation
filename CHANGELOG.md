@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+- Track the v2 balanced-parenthesis revision in
+  `markdown-it-inline-annotation@0.4.0`.
+  Glosses such as `(semi-)formal artefact` now render in full in Reading view
+  and Live Preview.
+- **Source compatibility:** escape standalone left parentheses to preserve
+  earlier first-close splits; old converter output that escaped only right
+  parentheses needs natural balanced pairs or both sides escaped.
+- Synchronize the manifest and compatibility map during `npm version`, and make
+  tag-based GitHub release uploads retryable.
+
 ## 0.3.10
 
 - Preserve emphasis, highlight, link, code, and other semantic DOM boundaries
